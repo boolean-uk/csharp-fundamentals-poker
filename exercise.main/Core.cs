@@ -18,7 +18,23 @@ namespace exercise.main
             result = new Tuple<string,string>(string.Empty, string.Empty);
            
 
-          
+            foreach (var card in hand)
+            {
+                if (card.Item1 == card.Item2)
+                {
+                    if (result.Item1 != string.Empty && GetValueOfCard(card.Item1) > GetValueOfCard(result.Item1))
+                    {
+                        result = card;
+                    }
+                    else if (result.Item1 == string.Empty)
+                    {
+                        result = card;
+                    }
+                    
+                    
+                    
+                }
+            }
 
           
 
@@ -26,7 +42,18 @@ namespace exercise.main
         }
         public int GetValueOfCard(string card)
         {
-            return  0;           
+           switch (card)
+            {
+                case "A": 
+                    return 14;
+                case "K":
+                    return 13;
+                case "Q":
+                    return 12;
+                case "J":
+                    return 11;
+                default: return int.Parse(card);
+            }           
         }
     }
 }
