@@ -46,7 +46,6 @@ namespace exercise.main
                 default:
                     Console.WriteLine(card + " is not a valid card input");
                     return 0;
-                    break;
 
             }
         }
