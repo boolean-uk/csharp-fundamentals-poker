@@ -5,6 +5,29 @@ namespace exercise.tests
     public class ExtensionTests
     {
         [Test]
+        public void TestThreeCards()
+        {
+            Extension extension = new Extension();
+            Tuple<string, string, string> hand1 = new Tuple<string, string, string>("4", "4", "2");
+            Tuple<string, string, string> hand2 = new Tuple<string, string, string>("1", "A", "4");
+            Tuple<string, string, string> hand3 = new Tuple<string, string, string>("K", "K", "K");
+            List<Tuple<string, string, string>> hands = [hand1, hand2];
+
+            Tuple<string, string, string> winner;
+            bool result = extension.winningThree(hands, out winner);
+            Assert.That(result, Is.False);
+            Assert.That(winner.Item1, Is.EqualTo(String.Empty));
+            Assert.That(winner.Item2, Is.EqualTo(String.Empty));
+
+            hands = [hand1, hand3];
+            result = extension.winningThree(hands, out winner);
+
+            Assert.That(result, Is.True);
+            Assert.IsTrue(winner.Item1 == "K" && winner.Item2 == "K" && winner.Item3 == "K");
+        }
+
+
+        [Test]
         public void CardTest()
         {
             Card card = new("A", "Hearts");

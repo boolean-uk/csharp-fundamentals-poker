@@ -2,11 +2,11 @@
 {
     public class Player
     {
-        private readonly string _name;
+        public readonly string name;
         private List<Card> hand;
         public Player(string name)
         {
-            _name = name;
+            this.name = name;
             hand = new();
         }
 
