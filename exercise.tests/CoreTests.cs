@@ -20,7 +20,6 @@ public class Tests
             new Tuple<string, string>("3","7")
         };
         Tuple<string, string> winner;
-        
         bool result = core.winningPair(hand, out winner);
 
         Assert.That(result, Is.False);
