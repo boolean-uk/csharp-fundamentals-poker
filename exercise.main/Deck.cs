@@ -15,7 +15,7 @@ namespace exercise.main
         //? Dictionary of cards
         private List<Card> cards;
 
-        private Deck() {
+        public Deck() {
             cards = GenerateDeck();
         }
 

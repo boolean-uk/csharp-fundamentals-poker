@@ -17,7 +17,7 @@ namespace exercise.main
             this.hand = new List<Card>();
         }
         /// <summary>
-        /// Hit = addig a card
+        /// Hit = addig a card to players hand
         /// </summary>
         public void Hit() {
             Card deltCard = deck.Deal();
@@ -37,7 +37,10 @@ namespace exercise.main
             hand.Clear();
         }
 
-        //TODO! Figure out the correct return type
+        /// <summary>
+        /// Builds a string of every singel card a player has on hand
+        /// </summary>
+        /// <returns> The complet hand of the player </returns>
         public string GetHand() {
             StringBuilder sb = new StringBuilder();
             foreach (Card card in hand) {
