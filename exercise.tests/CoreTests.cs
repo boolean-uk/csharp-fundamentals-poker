@@ -13,7 +13,7 @@ public class Tests
        
 
         Core core = new Core();
-       
+        Extension extension = new Extension();
         List<Tuple<string, string>> hand = new List<Tuple<string, string>> 
         { 
             new Tuple<string, string>("K", "5"),
@@ -92,6 +92,45 @@ public class Tests
 
         Assert.IsTrue(winner.Item1 == "7" && winner.Item2 == "7");
 
+    }
+    //{("4", "3, "3" ("5","5","5"),("7","7", "2"),("3","3","3")}  => true ("5", "5", "5")
+    [Test]
+    public void Scenario4()
+    {
+        Extension extension = new Extension();
+
+        List<Tuple<string, string, string>> hand = new List<Tuple<string, string, string>>
+        {
+            new Tuple<string, string, string>("4", "3", "3"),
+            new Tuple<string, string, string>("5", "5", "5"),
+            new Tuple<string, string, string>("7", "7", "2"),
+            new Tuple<string, string, string>("3","3", "3")
+        };
+        Tuple<string, string, string> winner;
+        bool result = extension.winningThree(hand, out winner);
+
+        Assert.That(result, Is.True);
+
+        Assert.IsTrue(winner.Item1 == "5" && winner.Item2 == "5" && winner.Item3 == "5");
+
+    }
+    //{("4", "3, "3"), ("5","5", "2")}  => false ("", "", "")
+    [Test]
+    public void Scenario5()
+    {
+        Extension extension = new Extension();
+
+        List<Tuple<string, string, string>> hand = new List<Tuple<string, string, string>>
+        {
+            new Tuple<string, string, string>("4", "3", "3"),
+            new Tuple<string, string, string>("5", "5", "2"),
+        };
+        Tuple<string, string, string> winner;
+        bool result = extension.winningThree(hand, out winner);
+
+        Assert.That(result, Is.False);
+
+        Assert.IsTrue(winner.Item1 == "" && winner.Item2 == "" && winner.Item3 == "");
     }
 
     [TestCase("2",2)]
