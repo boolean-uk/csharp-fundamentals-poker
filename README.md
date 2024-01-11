@@ -22,11 +22,12 @@ All cards have a numeric value, number cards having their face value, Jack=11, Q
 This exercises uses Tuples, a lightweight type for storing, specifically a Tuple<string,string> which can be thought as a pair of strings to represent each card in the pair.
 
 # Core Task
-Given two pairs of cards, return true if there is a winning pair and return it.
+Given two hands of cards, return true if there is a winning hand and return it. A winning hand is one where both cards are the same value. If more than one hand is a pair of matching cards, then the highest pair must win.
 
+If none of the hands is a pair, then just return false and an empty string tuple.
 
 ## Extension Task
-Given three cards, calculate the winning three.
+Given hands of three cards, calculate the winning hand when the hand is a triplet of three cards of the same value. If none of the hands are a triplet, return false and an empty string tuple.
 
 # Ungraded Extension
 

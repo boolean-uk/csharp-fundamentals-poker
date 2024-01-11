@@ -24,8 +24,30 @@ public class Tests
         bool result = core.winningPair(hand, out winner);
 
         Assert.That(result, Is.False);
-        Assert.That(winner.Item1, Is.EqualTo(string.Empty));
-        Assert.That(winner.Item2, Is.EqualTo(string.Empty));
+        Assert.That(winner.Item1, Is.EqualTo(String.Empty));
+        Assert.That(winner.Item2, Is.EqualTo(String.Empty));
+
+    }
+
+    //{("K","5"),("2","2")} => true out ("2","2")
+    public void Scenario1b()
+    {
+
+
+        Core core = new Core();
+
+        List<Tuple<string, string>> hand = new List<Tuple<string, string>>
+        {
+            new Tuple<string, string>("K", "5"),
+            new Tuple<string, string>("2","2")
+        };
+        Tuple<string, string> winner;
+
+        bool result = core.winningPair(hand, out winner);
+
+        Assert.That(result, Is.False);
+        Assert.That(winner.Item1, Is.EqualTo("2"));
+        Assert.That(winner.Item2, Is.EqualTo("2"));
 
     }
 
@@ -71,8 +93,7 @@ public class Tests
         Assert.IsTrue(winner.Item1 == "7" && winner.Item2 == "7");
 
     }
-    [TestCase("1",1)]
-    [TestCase("1",1)]
+
     [TestCase("2",2)]
     [TestCase("3",3)]
     [TestCase("4",4)]
