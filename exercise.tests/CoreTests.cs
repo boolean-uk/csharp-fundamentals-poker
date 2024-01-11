@@ -3,7 +3,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace exercise.tests;
 
-public class Tests
+public class CoreTests
 {
     
     //{("K","5"),("3","7")} => false out ("","")
