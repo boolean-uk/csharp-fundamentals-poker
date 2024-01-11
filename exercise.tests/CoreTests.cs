@@ -45,7 +45,7 @@ public class Tests
 
         bool result = core.winningPair(hand, out winner);
 
-        Assert.That(result, Is.False);
+        Assert.That(result, Is.True);
         Assert.That(winner.Item1, Is.EqualTo("2"));
         Assert.That(winner.Item2, Is.EqualTo("2"));
 
