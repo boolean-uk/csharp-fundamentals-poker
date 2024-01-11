@@ -15,18 +15,40 @@ namespace exercise.main
         //TODO: complete the following method, keeping the signature the same
         public bool winningPair(IEnumerable<Tuple<string, string>> hand, out Tuple<string, string> result)
         {
+
             result = new Tuple<string,string>(string.Empty, string.Empty);
-           
+            foreach (Tuple<string, string> duo in hand)
+            {
+                if (duo.Item1 == duo.Item2 && GetValueOfCard(duo.Item1) > GetValueOfCard(result.Item1))
+                {
+                    result = duo;
+                }
+            }
 
-          
-
-          
 
             return result.Item1!=string.Empty ? true : false;
         }
         public int GetValueOfCard(string card)
         {
-            return  0;           
+            if (Int32.TryParse(card, out int num)) return num;
+            switch (card)
+            {
+                case "J" :
+                    return 11;
+                case "Q":
+                    return 12;
+                case "K":
+                    return 13;
+                case "A":
+                    return 14;
+                case "":
+                    return 0;
+                default:
+                    Console.WriteLine(card + " is not a valid card input");
+                    return 0;
+                    break;
+
+            }
         }
     }
 }
