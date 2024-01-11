@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace exercise.main
+﻿namespace exercise.main
 {
     public class Extension
     {
@@ -12,8 +6,16 @@ namespace exercise.main
         public bool winningThree(IEnumerable<Tuple<string, string, string>> hand, out Tuple<string, string, string> result)
         {
             result = new Tuple<string, string, string>(string.Empty, string.Empty, string.Empty);
+            
+            Core core = new Core();
 
-            return false;
+            List<Tuple<string, string, string>> hands = hand.ToList();
+            foreach (var x in hands)
+            {
+                if (x.Item1 == x.Item2 && x.Item1 == x.Item3 && core.GetValueOfCard(result.Item1) < core.GetValueOfCard(x.Item1)) result = x;
+            }
+
+            return result.Item1 != string.Empty ? true : false;
         }
 
     }
