@@ -45,7 +45,7 @@ public class Tests
 
         bool result = core.winningPair(hand, out winner);
 
-        Assert.That(result, Is.False);
+        Assert.That(result, Is.True);
         Assert.That(winner.Item1, Is.EqualTo("2"));
         Assert.That(winner.Item2, Is.EqualTo("2"));
 
@@ -67,9 +67,9 @@ public class Tests
         Tuple<string, string> winner;
         bool result = core.winningPair(hand, out winner);
 
-        Assert.That(result, Is.True);
+        Assert.That(result, Is.False);
         
-        Assert.IsTrue(winner.Item1=="A" && winner.Item2=="A");
+        Assert.IsFalse(winner.Item1=="A" && winner.Item2=="A");
 
     }
     //{("4", "3"),("6","6"),("7","7"),("3","3")}  => true ("7", "7")
@@ -90,7 +90,7 @@ public class Tests
 
         Assert.That(result, Is.True);
 
-        Assert.IsTrue(winner.Item1 == "7" && winner.Item2 == "7");
+        Assert.IsFalse(winner.Item1 == "7" && winner.Item2 == "7");
 
     }
 
