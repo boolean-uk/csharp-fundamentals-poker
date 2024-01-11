@@ -10,31 +10,22 @@ namespace exercise.main
 {
     public class Core
     {
-        //2-14
         Dictionary<string, int> _values = new Dictionary<string, int>();
-        //Spades, Hearts, Clubs, Diamonds 
-        Dictionary<string, string> _suits = new Dictionary<string, string>();
-        //Suit - Value
-        List<Card> _deck = new List<Card>();
-
         public Dictionary<string, int> Values { get { return _values; } set { _values = value; } }
-        public Dictionary<string, string> Suits { get { return _suits; } set { _suits = value; } }
-        public List<Card> Deck { get { return _deck; } set { _deck = value; } }
 
         public Core()
         {
-            Values = new Dictionary<string, int>();
-            Suits = new Dictionary<string, string>();
-            Deck = new List<Card>();
-            //populateDeck();
+            populateValues();
         }
 
         //TODO: complete the following method, keeping the signature the same
         public bool winningPair(IEnumerable<Tuple<string, string>> hands, out Tuple<string, string> result)
         {
-            result = new Tuple<string, string>("10", "10");
+            result = new Tuple<string, string>(string.Empty, string.Empty);
+
             List<Tuple<string, string>> winningHands = new List<Tuple<string, string>>();
 
+            //Immutable tuples >_>
 
             foreach (var hand in hands)
             {
@@ -43,36 +34,41 @@ namespace exercise.main
                     winningHands.Add(hand);
                 }
             }
-            //Card card1 = drawCard();
-            //Card card2 = drawCard();
 
-            if (winningHands.Count > 0)
+            if (winningHands.Count == 1)
             {
                 result = winningHands[0];
-                //Tuple<string, string> result = new Tuple<string, string>(winningHands[0].Item1, winningHands[0].Item2);
-
-
-
             }
 
-            return result.Item1 != string.Empty ? true : false;
-        }
+            if (winningHands.Count > 1)
+            {
+                //List<int> valuedHands = new List<int>();
+                result = winningHands[0];
+                for (int i = 0; i < winningHands.Count; i++)
+                {
+                    if (Values[winningHands[i].Item1] > Values[result.Item1])
+                    {
+                        result = winningHands[i];
+                    }
 
+                }
+                
+            }
+
+
+
+
+
+            return result.Item1 != string.Empty ? true : false;
+
+
+        }
         public int GetValueOfCard(string card)
         {
-            return 0;
+            return Values[card];
         }
 
-
-
-
-
-
-
-
-
-        //Ungraded extension >_<
-        public void populateDeck()
+        public void populateValues()
         {
             Values.Add("2", 2);
             Values.Add("3", 3);
@@ -87,51 +83,7 @@ namespace exercise.main
             Values.Add("Q", 12);
             Values.Add("K", 13);
             Values.Add("A", 14);
-
-            Suits.Add("S", "Spades");
-            Suits.Add("H", "Hearts");
-            Suits.Add("D", "Diamonds");
-            Suits.Add("C", "Clubs");
-
-            foreach (var suit in Suits)
-            {
-                foreach (var value in Values)
-                {
-                    Card card = new Card(suit.Key, value.Key);
-                    Deck.Add(card);
-                }
-            }
         }
 
-        public Card drawCard()
-        {
-            Random random = new Random();
-            int cardPosition = random.Next(0, Deck.Count);
-            Card card = Deck[cardPosition];
-            Deck.RemoveAt(cardPosition);
-            return card;
-        }
-    }
-
-
-    public class Card
-    {
-        private string _suit;
-        private string _value;
-
-        public string Suit { get { return _suit; } set { _suit = value; } }
-        public string Value { get { return _value; } set { _value = value; } }
-
-
-        public Card(string suit, string value)
-        {
-            Suit = suit;
-            Value = value;
-        }
-
-        public string getAbbreviation()
-        {
-            return Suit.ToString()+Value.ToString();
-        }
     }
 }
