@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,16 +7,6 @@ using System.Threading.Tasks;
 
 namespace exercise.main
 {
-    public class Card(char value, string suit)
-    {
-        public char Value { get; set; }
-        public string Suit { get; set; }
-
-    }
-    public class Deck(List<Card> cards)
-    {
-        public List<Card> cards { get; set; }
-    }
     public class Extension
     {
         //TODO: complete the following method, keeping the signature the same
