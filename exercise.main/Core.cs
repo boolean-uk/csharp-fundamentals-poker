@@ -17,16 +17,16 @@ namespace exercise.main
 
         
         //TODO: complete the following method, keeping the signature the same
-        public bool winningPair(IEnumerable<Tuple<string, string>> hand, out Tuple<string, string> result)
+        public bool winningPair(IEnumerable<Tuple<string, string>> hands, out Tuple<string, string> result)
         {
             result = new Tuple<string, string>(string.Empty, string.Empty);
-            foreach (Tuple<string,string> pair in hand)
+            foreach (Tuple<string,string> hand in hands)
             {
-                if (pair.Item1 == pair.Item2)
+                if (hand.Item1 == hand.Item2)
                 {
-                    if (GetValueOfCard(pair.Item1) > GetValueOfCard(result.Item1))
+                    if (GetValueOfCard(hand.Item1) > GetValueOfCard(result.Item1))
                     {
-                        result = pair;
+                        result = hand;
                     }
                 }
             }
