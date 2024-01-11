@@ -31,10 +31,11 @@ namespace exercise.main
             _playerCards.RemoveAll(x => true);
         }
 
-        public Card playCard() 
+        public List<Card> playCards() 
         {
-            Card res = _playerCards.First();
-            _playerCards.RemoveAt(0);
+            List<Card> res = new List<Card> ();
+            _playerCards.ForEach(c => res.Add(c));
+            _playerCards.RemoveAll(x => true);
             return res;
         }
     }

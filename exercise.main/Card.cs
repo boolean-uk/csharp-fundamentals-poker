@@ -8,14 +8,17 @@ namespace exercise.main
 {
     public class Card
     {
-        string _value;
-        string _suit;
+        string value { get; set; }
+        string suit { get; set; }
 
-        public Card(string value, string suit) {
-            _value = value;
-            _suit = suit;
+        public Card(string value, string suit) 
+        {
+            this.value = value;
+            this.suit = suit;
         }
 
+        public string getValue() { return value; }
 
+        public string getSuit() { return suit; }
     }
 }
