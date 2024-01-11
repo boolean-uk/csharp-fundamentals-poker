@@ -16,17 +16,39 @@ namespace exercise.main
         public bool winningPair(IEnumerable<Tuple<string, string>> hand, out Tuple<string, string> result)
         {
             result = new Tuple<string,string>(string.Empty, string.Empty);
-           
 
-          
-
-          
+            foreach (var pair in hand)
+            {
+                if (pair.Item1 == pair.Item2)
+                {
+                    if (result.Item1 != string.Empty && GetValueOfCard(pair.Item1) > GetValueOfCard(result.Item1))
+                    {
+                        result = pair;
+                    }
+                    else if(result.Item1 == string.Empty)
+                    {
+                        result = pair;
+                    }
+                }
+            }
 
             return result.Item1!=string.Empty ? true : false;
         }
         public int GetValueOfCard(string card)
         {
-            return  0;           
+            switch (card)
+            {
+                case "A":
+                    return 14;
+                case "K":
+                    return 13;
+                case "Q":
+                    return 12;
+                case "J":
+                    return 11;
+                default:
+                    return int.Parse(card);
+            }    
         }
     }
 }
