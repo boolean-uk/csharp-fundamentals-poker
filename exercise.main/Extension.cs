@@ -8,6 +8,16 @@ namespace exercise.main
 {
     public class Extension
     {  
+        
+    // For each hand, get the hand card values
+    // check that the hand values are all the same
+    // if not the same, ignore this hand
+    // if all 3 cards are the same, mark this hand as a triplet 
+    // and check if this triplet is of bigger value of a previous triplet
+    // if bigger, then save this triplet as the result
+    // finally, return true if result is a valid triplet, false if no triplet found
+        
+
         public bool winningThree(IEnumerable<Tuple<string, string, string>> hands, out Tuple<string, string, string> result)
     {
         int maxValue = -1;
