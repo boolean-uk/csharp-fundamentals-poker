@@ -22,8 +22,6 @@ namespace exercise.main
             result = new Tuple<string,string>(string.Empty, string.Empty);
            
             foreach (var touple in hand) {
-                string t1 = touple.Item1;
-                string t2 = touple.Item2;
                 if (touple.Item1.Equals(touple.Item2)) { //!found a pair
                     // Check if newly faound pair is larger.
                     if (checkHighestPair(touple.Item1, result.Item1)) {
@@ -48,5 +46,7 @@ namespace exercise.main
             cards.TryGetValue(card, out int value);
             return value;           
         }
+
+        
     }
 }
