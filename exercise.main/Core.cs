@@ -10,7 +10,11 @@ namespace exercise.main
 {
     public class Core
     {
-       
+        private Dictionary<string, int> _scoring = new Dictionary<string, int>()
+        {
+            {"2", 2}, {"3", 3}, {"4", 4}, {"5", 5}, {"6", 6}, {"7", 7}, 
+            {"8", 8}, {"9", 9 }, {"10", 10}, {"J", 11}, {"Q", 12}, {"K", 13}, {"A", 14}
+        };
         
         //TODO: complete the following method, keeping the signature the same
         public bool winningPair(IEnumerable<Tuple<string, string>> hand, out Tuple<string, string> result)
@@ -19,14 +23,27 @@ namespace exercise.main
            
 
           
+            foreach (Tuple<string, string> pair in hand)
+            {
+                if (pair.Item1 != pair.Item2) continue;
 
+                if ( result.Item1 == string.Empty )
+                {
+                    result = pair;
+                }
+                else if ( GetValueOfCard(pair.Item1) > GetValueOfCard(result.Item1))
+                {
+                    result = pair;
+                }
+            }
           
 
             return result.Item1!=string.Empty ? true : false;
         }
+
         public int GetValueOfCard(string card)
         {
-            return  0;           
+            return _scoring[card];           
         }
     }
 }
