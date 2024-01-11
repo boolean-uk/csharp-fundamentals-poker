@@ -10,8 +10,24 @@ namespace exercise.main
 {
     public class Core
     {
-       
-        
+        Dictionary<string, int> Values = new Dictionary<string, int>()
+        {
+            { "1", 1 },
+            { "2", 2 },
+            { "3", 3 },
+            { "4", 4 },
+            { "5", 5 },
+            { "6", 6 },
+            { "7", 7 },
+            { "8", 8 },
+            { "9", 9 },
+            { "10", 10 },
+            { "J", 11 },
+            { "Q", 12 },
+            { "K", 13 },
+            { "A", 14 }
+        };
+
         //TODO: complete the following method, keeping the signature the same
         public bool winningPair(IEnumerable<Tuple<string, string>> hand, out Tuple<string, string> result)
         {
@@ -40,23 +56,6 @@ namespace exercise.main
         }
         public int GetValueOfCard(string card)
         {
-            Dictionary<string, int> Values = new Dictionary<string, int>()
-            {
-                { "1", 1 },
-                { "2", 2 },
-                { "3", 3 },
-                { "4", 4 },
-                { "5", 5 },
-                { "6", 6 },
-                { "7", 7 },
-                { "8", 8 },
-                { "9", 9 },
-                { "10", 10 },
-                { "J", 11 },
-                { "Q", 12 },
-                { "K", 13 },
-                { "A", 14 }
-            };
             return  Values.GetValueOrDefault(card);           
         }
     }
