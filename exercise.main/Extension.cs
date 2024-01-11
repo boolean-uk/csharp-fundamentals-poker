@@ -8,10 +8,14 @@
             result = new Tuple<string, string, string>(string.Empty, string.Empty, string.Empty);
             
             Core core = new Core();
-            
 
+            List<Tuple<string, string, string>> hands = hand.ToList();
+            foreach (var x in hands)
+            {
+                if (x.Item1 == x.Item2 && x.Item1 == x.Item3 && core.GetValueOfCard(result.Item1) < core.GetValueOfCard(x.Item1)) result = x;
+            }
 
-            return false;
+            return result.Item1 != string.Empty ? true : false;
         }
 
     }
