@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace exercise.main
@@ -12,15 +13,15 @@ namespace exercise.main
         //TODO - The `Deck` should have a method to `Deal()` one card from the deck, removing it from the list of cards in the deck
 
         //? Dictionary of cards
-        private Dictionary<string, Card> cards;
+        private List<Card> cards;
 
         private Deck() {
             cards = GenerateDeck();
         }
 
-        private Dictionary<string, Card> GenerateDeck() {
+        private List<Card> GenerateDeck() {
 
-            Dictionary<string, Card> deck = new Dictionary<string, Card>();
+            List<Card> deck = new List<Card>();
 
             // Keep all combinations
             string[] value = { "1","2","3","4","5","6","7","8","9","10","J","Q","K","A" };
@@ -31,7 +32,7 @@ namespace exercise.main
                 
                 foreach (string _suit in suit) {
                     string cardName = $"{_value} of {_suit}";
-                    deck.Add(cardName, new Card(_value, _suit));
+                    deck.Add(new Card(_value, _suit));
                 }
             }
             return deck;
@@ -39,7 +40,7 @@ namespace exercise.main
 
         public void Shuffle() {
             Random rd = new Random();
-            List<KeyValuePair<string, Card>> shuffleDeck = cards.ToList();
+            List<Card> shuffleDeck = cards;
 
             // Random order
             for (int i = 0; i < shuffleDeck.Count; i++) {
@@ -49,11 +50,17 @@ namespace exercise.main
                 shuffleDeck[i] = value;
             }
 
-            cards = new Dictionary<string, Card>(shuffleDeck);
+            cards = shuffleDeck;
         }
 
-        public void Deal() {
-
+        public Card Deal() {
+            
+            if (cards.Count == 0) { //!Empty deck
+                throw new NullReferenceException();
+            }
+            Card deltCard = cards[cards.Count-1];
+            cards.RemoveAt(cards.Count-1);
+            return deltCard;
         }
     }
 }
