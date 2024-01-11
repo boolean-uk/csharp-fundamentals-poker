@@ -11,22 +11,54 @@ namespace exercise.main
     public class Core
     {
        
-        
-        //TODO: complete the following method, keeping the signature the same
-        public bool winningPair(IEnumerable<Tuple<string, string>> hand, out Tuple<string, string> result)
+        public bool winningPair(IEnumerable<Tuple<string, string>> hands, out Tuple<string, string> result)
+    {
+        int maxValue = -1;
+        Tuple<string, string> winningPair = Tuple.Create(string.Empty, string.Empty);
+
+        foreach (var hand in hands)
         {
-            result = new Tuple<string,string>(string.Empty, string.Empty);
-           
+            
+            int value1 = GetValueOfCard(hand.Item1);
+            int value2 = GetValueOfCard(hand.Item2);
 
-          
-
-          
-
-            return result.Item1!=string.Empty ? true : false;
+            
+            if (value1 == value2)
+            {
+                
+                if (value1 > maxValue)
+                {
+                    maxValue = value1;
+                    winningPair = hand;
+                }
+            }
         }
-        public int GetValueOfCard(string card)
-        {
-            return  0;           
-        }
+
+        result = winningPair;
+
+        return winningPair.Item1 != string.Empty;
     }
+
+    public int GetValueOfCard(string card)
+    {
+        switch (card)
+        {
+            case "J":
+                return 11;
+            case "Q":
+                return 12;
+            case "K":
+                return 13;
+            case "A":
+                return 14;
+            default:
+                if (int.TryParse(card, out int value))
+                    return value;
+                return 0; 
+        }
+    }    
 }
+}
+
+
+
