@@ -10,6 +10,7 @@ namespace exercise.main
 {
     public class Core
     {
+        //Test before making a pull request
        
         
         //TODO: complete the following method, keeping the signature the same
