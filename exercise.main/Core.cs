@@ -15,27 +15,21 @@ namespace exercise.main
         public bool winningPair(IEnumerable<Tuple<string, string>> hand, out Tuple<string, string> result)
         {
             Tuple<string, string> emptyHand = new Tuple<string, string>(string.Empty, string.Empty);
-            //result.Item1 != string.Empty ? true : false; ;
 
+            // Pick out all winning hands, with a sorting of highest on top/first.
             IEnumerable<Tuple<string, string>> winningHands = hand
                 .Where(a => (a.Item1 == a.Item2))
                 .OrderByDescending(a => GetValueOfCard(a.Item1));
-            Tuple<string, string> bestHand = winningHands.FirstOrDefault(emptyHand);
+            // Pick the first tuple, if none exists then pick the emptyHand defined earlier.
+            result = winningHands.FirstOrDefault(emptyHand);
 
-            result = bestHand;
-            return (bestHand.Item1 != string.Empty ? true : false);
-            /*
-            result = hand
-                .Where(a => (a.Item1 == a.Item2))
-                .OrderByDescending(a => GetValueOfCard(a.Item1))
-                .FirstOrDefault(emptyHand);
-            */
-            //string var = "hello";
-            return (emptyHand.Item1 == string.Empty ? false: true);
+            return (result.Item1 != string.Empty ? true : false);
+
         }
         public int GetValueOfCard(string card)
         {
             int value;
+            // Switch case to parse the strings into ints
             switch (card) 
             {
                 case "J":
