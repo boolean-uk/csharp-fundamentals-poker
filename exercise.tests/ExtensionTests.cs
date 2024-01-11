@@ -40,16 +40,16 @@ namespace exercise.tests
         public void PlayerTest()
         {
             Player player = new("Skjalg");
-            Assert.That(player.GetCards.Count, Is.EqualTo(0));
+            Assert.That(player.GetCards().Count, Is.EqualTo(0));
             Card card = new Card("A", "Hearts");
             player.GiveCard(card);
-            Assert.That(player.GetCards.Count, Is.EqualTo(1));
-            Assert.That(player.GetCards[0], Is.EqualTo(card));
+            Assert.That(player.GetCards().Count, Is.EqualTo(1));
+            Assert.That(player.GetCards()[0], Is.EqualTo(card));
             Card card2 = new Card("10", "Clubs");
             player.GiveCard(card2);
-            Assert.That(player.GetCards.Count, Is.EqualTo(2));
+            Assert.That(player.GetCards().Count, Is.EqualTo(2));
             player.ClearHand();
-            Assert.That(player.GetCards.Count, Is.EqualTo(0)); //Hand should now be empty again
+            Assert.That(player.GetCards().Count, Is.EqualTo(0)); //Hand should now be empty again
         }
     }
 }
