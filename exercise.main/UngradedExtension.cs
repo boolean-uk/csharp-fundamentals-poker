@@ -96,7 +96,7 @@ namespace exercise.main
 
             foreach (Card card in _cards)
             {
-
+                
             }
 
             throw new NotImplementedException();
