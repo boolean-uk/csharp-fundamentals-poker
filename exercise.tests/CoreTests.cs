@@ -5,6 +5,12 @@ namespace exercise.tests;
 
 public class Tests
 {
+
+    [Test]
+    public void extension2Tests()
+    {
+
+    }
     [Test]
     public void extensionTests()
     {
