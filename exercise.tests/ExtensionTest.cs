@@ -38,17 +38,17 @@ public class ExtensionTest
         Extension core = new Extension();
     
         List<Tuple<string, string, string>> hand = new List<Tuple<string, string, string>> { 
-            new Tuple<string, string, string>("A", "A", "5"),
-            new Tuple<string, string, string>("5","6", "8")
+            new Tuple<string, string, string>("A", "A", "A"),
+            new Tuple<string, string, string>("5", "5", "5")
         };
         Tuple<string, string, string> winner;
     
         bool result = core.winningThree(hand, out winner);
 
         Assert.That(result, Is.True);
-        Assert.That(winner.Item1, Is.EqualTo("5"));
-        Assert.That(winner.Item2, Is.EqualTo("5"));
-        Assert.That(winner.Item2, Is.EqualTo("5"));
+        Assert.That(winner.Item1, Is.EqualTo("A"));
+        Assert.That(winner.Item2, Is.EqualTo("A"));
+        Assert.That(winner.Item3, Is.EqualTo("A"));
 
     }
 
@@ -73,7 +73,7 @@ public class ExtensionTest
 
         Assert.That(result, Is.True);
     
-        Assert.IsTrue(winner.Item1=="7" && winner.Item2=="7" && winner.Item3 == "7");
+        Assert.IsTrue(winner.Item1=="6" && winner.Item2=="6" && winner.Item3 == "6");
 
     }
 }
