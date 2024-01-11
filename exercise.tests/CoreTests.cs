@@ -33,7 +33,6 @@ public class Tests
     public void Scenario1b()
     {
 
-
         Core core = new Core();
 
         List<Tuple<string, string>> hand = new List<Tuple<string, string>>

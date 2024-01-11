@@ -27,7 +27,7 @@ namespace exercise.main
             if (!valueToCards.ContainsKey(value1))
                 valueToCards[value1] = new List<Tuple<string, string>>();
             valueToCards[value1].Add(cardPair);
-
+    
             if (value1 != value2)
             {
                 if (!valueToCards.ContainsKey(value2))
@@ -40,7 +40,8 @@ namespace exercise.main
                 if (!valueToCards.ContainsKey(value1))
                     valueToCards[value1] = new List<Tuple<string, string>>();
                 valueToCards[value1].Add(cardPair);
-            }           
+            } 
+          
         }
 
         int maxValue = -1;
@@ -64,24 +65,6 @@ namespace exercise.main
     {
         switch (card)
         {
-            case "2":
-                return 2;
-            case "3":
-                return 3;
-            case "4":
-                return 4;
-            case "5":
-                return 5;
-            case "6":
-                return 6;
-            case "7":
-                return 7;
-            case "8":
-                return 8;
-            case "9":
-                return 9;
-            case "10":
-                return 10;
             case "J":
                 return 11;
             case "Q":
