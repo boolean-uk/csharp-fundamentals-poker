@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using exercise.main.Poker;
 
-Console.WriteLine("Press any key");
+Console.WriteLine("Press enter to continue the poker simulation");
 
 Console.ReadLine();
 
@@ -22,8 +22,8 @@ foreach(Player p in pokerGame.Players)
     {
         Console.WriteLine("and ");
     }
-    
-    Console.Write("+"+p.Name+"+");
+
+    Console.Write("+"+ p.Name +"+");
 }
 Console.WriteLine(" joined the dealer for a game of poker.");
 
