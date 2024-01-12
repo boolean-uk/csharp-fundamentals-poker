@@ -25,20 +25,14 @@ namespace exercise.main
             
             foreach (var tup in hand)
             {
-                if (tup.Item1.Equals(tup.Item2))
+                if (result.Item1 == string.Empty && tup.Item1.Equals(tup.Item2))
                 {
                     result = tup;
                 }
-                if (result.Item1 != String.Empty)
+                if (result.Item1 != string.Empty && tup.Item1 == tup.Item2 && GetValueOfCard(result.Item1) < GetValueOfCard(tup.Item1))
                 {
-                    if (tup.Item1.Equals(tup.Item2) && GetValueOfCard(tup.Item1) > GetValueOfCard(result.Item1))
-                    {
-                        // Dont reach this place
-                        result = tup;
-                        Console.WriteLine(result.Item1);
-                    }
+                    result = tup;
                 }
-
             }
             return result.Item1!=string.Empty ? true : false;
         }

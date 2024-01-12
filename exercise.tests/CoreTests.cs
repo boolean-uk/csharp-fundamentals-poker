@@ -27,7 +27,6 @@ public class Tests
         Assert.That(winner.Item2, Is.EqualTo(String.Empty));
 
     }
-
     //{("K","5"),("2","2")} => true out ("2","2")
     public void Scenario1b()
     {
