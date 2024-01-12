@@ -34,7 +34,12 @@ Given hands of three cards, calculate the winning hand when the hand is a triple
 Simulate using different classes a Game of Texas Hold'em poker.
 
 Requirements:
-- Implement a `Card` class that stores the card value (1, 2, 3 ... J, Q, K) and the suit (spades, hearts, etc...)
+  - Implement a `Card` class that stores the card value (1, 2, 3 ... J, Q, K) and the suit (spades, hearts, etc...)            
+|Classes	|Methods/Properties	|Scenario	                   |Outputs|
+|-----------------------------------------------------
+| 'Card'    | get:set: value    | stores card values and suits | void  |
+
+
 - Implement a `Deck` class that stores a list / dictionary / array of `Card` objects
     - The `Deck` should have a method to `Shuffle()` / regenerate the deck
     - The `Deck` should have a method to `Deal()` one card from the deck, removing it from the list of cards in the deck
