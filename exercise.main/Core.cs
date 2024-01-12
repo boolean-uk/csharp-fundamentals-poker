@@ -25,8 +25,6 @@ namespace exercise.main
 
             List<Tuple<string, string>> winningHands = new List<Tuple<string, string>>();
 
-            //Immutable tuples >_>
-
             foreach (var hand in hands)
             {
                 if (hand.Item1 == hand.Item2)
@@ -55,12 +53,7 @@ namespace exercise.main
                 
             }
 
-
-
-
-
             return result.Item1 != string.Empty ? true : false;
-
 
         }
         public int GetValueOfCard(string card)
