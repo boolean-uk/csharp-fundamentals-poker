@@ -17,8 +17,8 @@ namespace exercise.main
         Deck _deck;
         List<Card> _deckCards = new List<Card>();
 
-        int _dealCounter = 0;
         Core _core = new Core();
+        Extension _extension = new Extension();
 
         public PokerGame()
         {
@@ -41,7 +41,7 @@ namespace exercise.main
 
         public void checkVictory() 
         {
-            Console.WriteLine("");
+            Console.WriteLine();
             Console.WriteLine("The cards on the table is:");
             foreach (Card card in _deckCards) 
             {
@@ -56,8 +56,7 @@ namespace exercise.main
                 p1Pairs.Add(new Tuple<string, string>(_player1PlayedCards.Last().getValue(), card.getValue()));
             }
             IEnumerable<Tuple<string, string>> p1Values = p1Pairs;
-            Tuple<string, string> p1Result;
-            bool p1 = _core.winningPair(p1Values, out p1Result);
+
 
             List<Tuple<string, string>> p2Pairs = new List<Tuple<string, string>>();
             foreach (Card card in _deckCards)
@@ -66,42 +65,46 @@ namespace exercise.main
                 p2Pairs.Add(new Tuple<string, string>(_player2PlayedCards.Last().getValue(), card.getValue()));
             }
             IEnumerable<Tuple<string, string>> p2Values = p2Pairs;
+
+            Tuple<string, string> p1Result;
+            bool p1 = _core.winningPair(p1Values, out p1Result);
             Tuple<string, string> p2Result;
             bool p2 = _core.winningPair(p2Values, out p2Result);
 
-            Console.WriteLine($"{_player1.getPlayerName()} had: " +
+            Console.WriteLine($"{_player1.getPlayerName()} had:\n" +
                 $"{_player1PlayedCards.First().getValue()} of " +
                 $"{_player1PlayedCards.First().getSuit()} and " +
                 $"{_player1PlayedCards.Last().getValue()} of " +
                 $"{_player1PlayedCards.Last().getSuit()}");
 
-            Console.WriteLine($"{_player2.getPlayerName()} had: " +
+            Console.WriteLine($"{_player2.getPlayerName()} had:\n" +
                 $"{_player2PlayedCards.First().getValue()} of " +
                 $"{_player2PlayedCards.First().getSuit()} and " +
                 $"{_player2PlayedCards.Last().getValue()} of " +
                 $"{_player2PlayedCards.Last().getSuit()}");
 
+            // Pair victory
             if (p1 && p2)
             {
                 if (_core.GetValueOfCard(p1Result.Item1) > _core.GetValueOfCard(p2Result.Item1))
-                { this.victory(_player1, p1Result); }
-                else { this.victory(_player2, p2Result); };
+                { this.victoryPair(_player1, p1Result); }
+                else { this.victoryPair(_player2, p2Result); };
             }
             else if (p1)
             {
-                victory(_player1, p1Result);
+                victoryPair(_player1, p1Result);
             }
-            else if (p2) 
-            { 
-                victory(_player2, p2Result); 
+            else if (p2)
+            {
+                victoryPair(_player2, p2Result);
             }
-            else 
-            { 
+            else
+            {
                 Console.WriteLine("Game over, 5 cards have been dealt. \n No one wins.");
             }
         }
 
-        internal void victory(Player player, Tuple<string, string> winningCards) 
+        internal void victoryPair(Player player, Tuple<string, string> winningCards) 
         {
             Console.WriteLine($"{player.getPlayerName()} won with a pair of {winningCards.Item1}'s!\nGame is over.");
         }
@@ -132,7 +135,6 @@ namespace exercise.main
             Card newCard = _deck.Deal();
             _deckCards.Add(newCard);
             Console.WriteLine($"{newCard.getValue()} of {newCard.getSuit()} was added to the table.");
-            _dealCounter++;
         }
     }
 }
