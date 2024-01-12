@@ -3,7 +3,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace exercise.tests;
 
-public class Tests
+public class CoreTests
 {
     
     //{("K","5"),("3","7")} => false out ("","")
@@ -55,8 +55,6 @@ public class Tests
     [Test]
     public void Scenario2()
     {
-
-
         Core core = new Core();
 
         List<Tuple<string, string>> hand = new List<Tuple<string, string>>
