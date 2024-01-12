@@ -42,11 +42,11 @@ namespace exercise.main
             return result.Item1!=string.Empty ? true : false;
         }
 
-        public bool winningtriple(IEnumerable<Tuple<string, string, string>> hand, out Tuple<string, string, string> result)
+        public bool winningTriple(IEnumerable<Tuple<string, string, string>> hands, out Tuple<string, string, string> result)
         {
             result = new Tuple<string, string,string>(string.Empty, string.Empty, string.Empty);
 
-            foreach (var pair in hand)
+            foreach (var pair in hands)
             {
 
                 if (pair.Item1 == pair.Item2 && pair.Item1 == pair.Item3)

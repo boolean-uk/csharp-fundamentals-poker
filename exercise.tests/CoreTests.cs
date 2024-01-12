@@ -118,4 +118,25 @@ public class Tests
         int result = core.GetValueOfCard(card);
         Assert.That(value, Is.EqualTo(result));
     }
+
+    [Test]
+    public void ScenarioTripleHands()//Tests Extennsion - hand with triples
+    {
+        Core core = new Core();
+
+        List<Tuple<string, string,string>> hands = new List<Tuple<string, string,string>>
+        {
+            new Tuple<string, string, string>("10", "10","3"),
+            new Tuple<string, string, string>("6", "6","6"),
+            new Tuple<string, string, string>("8", "8","8"),
+            new Tuple<string, string, string>("3","3", "3")
+        };
+        Tuple<string, string, string> winner;
+        bool result = core.winningTriple(hands, out winner);
+
+        Assert.That(result, Is.True);
+
+        Assert.IsTrue(winner.Item1 == "8" && winner.Item2 == "8");
+
+    }
 }
