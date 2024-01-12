@@ -195,6 +195,8 @@ namespace exercise.main
                 _deck.Deal(_table); render();
 
                 writeWinners();
+
+                Console.WriteLine("\n");
                 Console.ResetColor();
             }
 
