@@ -11,7 +11,6 @@ public class Tests
     public void Scenario1()
     {
        
-
         Core core = new Core();
        
         List<Tuple<string, string>> hand = new List<Tuple<string, string>> 
@@ -55,8 +54,6 @@ public class Tests
     [Test]
     public void Scenario2()
     {
-
-
         Core core = new Core();
 
         List<Tuple<string, string>> hand = new List<Tuple<string, string>>
@@ -114,4 +111,11 @@ public class Tests
         Assert.That(result, Is.EqualTo(value));
     }
 
+    [TestCase("A", 14)]
+    public void getCardValue(string card, int value)
+    {
+        Core core = new Core();
+        int result = core.GetValueOfCard(card);
+        Assert.That(value, Is.EqualTo(result));
+    }
 }
