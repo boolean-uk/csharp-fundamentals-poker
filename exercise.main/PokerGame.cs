@@ -16,6 +16,7 @@ namespace exercise.main
         };
         Deck deck = new Deck();
         Table flop = new Table();
+        Winner winner = new Winner();
 
         public PokerGame()
         {
@@ -43,6 +44,7 @@ namespace exercise.main
             NextRound();
 
             Console.WriteLine($"The game is finished!");
+            winner.DetermineWinner();
             ShowGame();
             Console.WriteLine("Do you want to play another round? (y/n)");
             bool ask = true;

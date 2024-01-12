@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace exercise.main
 {
-    internal class Player
+    public class Player
     {
         private string _name;
         private List<Card> _hand = new List<Card>();
@@ -15,6 +15,7 @@ namespace exercise.main
 
         public bool IsPlaying { get { return _isPlaying; } }
         public string Name { get { return _name; } }
+        public List<Card> Hand { get { return _hand; } }
         public Player(string name)
         {
             _name = name;
