@@ -10,8 +10,6 @@ public class Tests
     [Test]
     public void Scenario1()
     {
-       
-
         Core core = new Core();
        
         List<Tuple<string, string>> hand = new List<Tuple<string, string>> 
