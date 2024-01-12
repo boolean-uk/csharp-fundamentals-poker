@@ -10,6 +10,7 @@ namespace exercise.tests
 {
     internal class WinningHandsTests
     {
+
         [Test]
         public void ThreeOfAKindTest()
         {
@@ -26,6 +27,23 @@ namespace exercise.tests
             winningHands.IterateWinConditions(cards);
 
             Assert.That(winningHands.Score, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void TwoPairsTest()
+        {
+            WinningHands winningHands = new();
+            List<Card> cards = new()
+            {
+                new Card("K", "Spades"),
+                new Card("K", "Hearts"),
+                new Card("5", "Hearts"),
+                new Card("5", "Diamonds"),
+                new Card("4", "Spades")
+            };
+            winningHands.IterateWinConditions(cards);
+
+            Assert.That(winningHands.Score, Is.EqualTo(3));
         }
     }
 }

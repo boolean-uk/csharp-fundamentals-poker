@@ -8,8 +8,9 @@ namespace exercise.main.Poker
 {
     public class Player
     {
-        private string _name;
-        private List<Card> _hand;
+        private string _name = "No Name";
+        private List<Card> _hand = new();
+        public int Score { get; set; }
 
         public Player(string name)
         {

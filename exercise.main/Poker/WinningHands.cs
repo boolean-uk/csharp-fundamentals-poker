@@ -15,24 +15,29 @@ namespace exercise.main.Poker
 
         public int IterateWinConditions(List<Card> playerCommunityCards)
         {
+            _score = 0;
             _playerCommunityCards = playerCommunityCards;
             _actions = new()
             {
-                RoyalFlush,
+                // RoyalFlush,
                 // StraightFlush,
                 // FourOfAKind,
                 // FullHouse,
                 // Flush,
                 // Straight,
                 ThreeOfAKind,
-                // TwoPair,
+                TwoPair,
                 // Pair,
                 // HighCard,
             };
 
-            foreach (Action action in  _actions)
+            foreach (Action action in _actions)
             {
                 action();
+                if (_score != 0) // Break if score has changed
+                {
+                    break;
+                }
             }
 
             return _score;
@@ -98,12 +103,20 @@ namespace exercise.main.Poker
 
         private void TwoPair()
         {
-            throw new NotImplementedException();
+            var groupCards = _playerCommunityCards.GroupBy(x => x.Value);
+            if (groupCards.Where(c => c.Count() == 2).Count() == 2)
+            {
+                _score = 3;
+            }
         }
 
         private void Pair()
         {
-            throw new NotImplementedException();
+            var groupCards = _playerCommunityCards.GroupBy(x => x.Value);
+            if (groupCards.Any(c => c.Count() == 2))
+            {
+                _score = 2;
+            }
         }
 
         private void HighCard()

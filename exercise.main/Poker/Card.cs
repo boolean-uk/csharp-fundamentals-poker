@@ -29,6 +29,11 @@ namespace exercise.main.Poker
             {"A", 14}
         };
 
+        public override string ToString()
+        {
+            return $"{_value} {_suit}";
+        }
+
         public static List<string> suits = new()
         {
             "Spades", "Hearts", "Diamonds", "Clubs"

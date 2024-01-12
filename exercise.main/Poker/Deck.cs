@@ -10,16 +10,6 @@ namespace exercise.main.Poker
     {
         private List<Card> _cards;
 
-        public Deck(int amount)
-        {
-            _cards = GenerateCards(amount);
-        }
-        
-        public Deck(List<Card> cards)
-        {
-            _cards = cards;
-        }
-
         public void Shuffle()
         {
             _cards.OrderBy(x => Guid.NewGuid());
@@ -43,18 +33,17 @@ namespace exercise.main.Poker
             return returnedCard;
         }
 
-        private List<Card> GenerateCards(int amount)
+        public void GenerateCards(int amount)
         {
+            _cards = new();
             Random random = new Random();
             var cardTypes = Card.valuePairs.Keys;
-            var cards = new List<Card>();
             for (int i = 0; i <= amount; i++)
             {
                 string selectedType = cardTypes.ElementAt(random.Next(0, cardTypes.Count - 1));
                 string selectedSuit = Card.suits.ElementAt(random.Next(0, Card.suits.Count - 1));
-                cards.Add(new Card(selectedType, selectedSuit));
+                _cards.Add(new Card(selectedType, selectedSuit));
             }
-            return cards;
         }
     }
 }
