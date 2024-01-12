@@ -5,7 +5,98 @@ namespace exercise.tests;
 
 public class Tests
 {
-    
+
+
+    [Test]
+    public void extension2Tests()
+    {
+        Player player1 = new Player("Oneal");
+        Deck deck1 = new main.Deck();
+        deck1.Shuffle();
+        player1.AddCard(deck1.Deal());
+        player1.AddCard(deck1.Deal());
+
+        Assert.That(player1.ShowHand != null);
+
+    }
+
+    [Test]
+    public void extension2Tests1()
+    {
+        Player player1 = new Player("Oneal");
+        Deck deck1 = new main.Deck();
+        deck1.Shuffle();
+        // player1.AddCard(deck1.Deal());
+        //  player1.AddCard(deck1.Deal());
+
+        //player1.RemoveCards();
+
+        Assert.That(player1.ShowHand().First() ==  ;
+
+    }
+    [Test]
+    public void extensionTests()
+    {
+        Extension extension = new Extension();
+
+        List<Tuple<string, string, string>> hand = new List<Tuple<string, string, string>>
+        {
+            new Tuple<string, string, string>("5", "5", "4"),
+            new Tuple<string, string, string>("3","7", "K"),
+            new Tuple<string, string, string>("4", "4", "4"),
+            new Tuple<string, string, string>("A", "A", "A")
+    };
+    Tuple<string, string, string> winner;
+
+    bool result = extension.winningThree(hand, out winner);
+
+        Assert.That(result, Is.True);
+        Assert.That(winner.Item1, Is.EqualTo("A"));
+        Assert.That(winner.Item2, Is.EqualTo("A"));
+        Assert.That(winner.Item3, Is.EqualTo("A"));
+
+    }
+
+
+    [Test]
+    public void manTestcase1()
+    {
+        Core core = new Core();
+
+        List<Tuple<string, string>> hand = new List<Tuple<string, string>>
+        {
+            new Tuple<string, string>("5", "5"),
+            new Tuple<string, string>("3","7")
+        };
+        Tuple<string, string> winner;
+
+        bool result = core.winningPair(hand, out winner);
+        
+        Assert.That(result, Is.True);
+        Assert.That(winner.Item1, Is.EqualTo("5"));
+        Assert.That(winner.Item2, Is.EqualTo("5"));
+    }
+
+    [Test]
+    public void manTestcase2()
+    {
+        Core core = new Core();
+
+        List<Tuple<string, string>> hand = new List<Tuple<string, string>>
+        {
+            new Tuple<string, string>("5", "5"),
+            new Tuple<string, string>("K","K")
+        };
+        Tuple<string, string> winner;
+
+        bool result = core.winningPair(hand, out winner);
+
+        Assert.That(result, Is.True);
+        Assert.That(winner.Item1, Is.EqualTo("K"));
+        Assert.That(winner.Item2, Is.EqualTo("K"));
+    }
+
+
     //{("K","5"),("3","7")} => false out ("","")
     [Test]
     public void Scenario1()
