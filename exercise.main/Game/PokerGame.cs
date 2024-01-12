@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace exercise.main
+namespace exercise.main.Game
 {
     public class PokerGame
     {
@@ -33,24 +33,24 @@ namespace exercise.main
             setTable();
         }
 
-        public void showCards() 
+        public void showCards()
         {
             _player1PlayedCards = _player1.playCards();
             _player2PlayedCards = _player2.playCards();
         }
 
-        public void checkVictory() 
+        public void checkVictory()
         {
             Console.WriteLine();
             Console.WriteLine("The cards on the table is:");
-            foreach (Card card in _deckCards) 
+            foreach (Card card in _deckCards)
             {
                 Console.Write($"{card.getValue()} of {card.getSuit()}, ");
             }
             Console.WriteLine();
 
             List<Tuple<string, string>> p1Pairs = new List<Tuple<string, string>>();
-            foreach (Card card in _deckCards) 
+            foreach (Card card in _deckCards)
             {
                 p1Pairs.Add(new Tuple<string, string>(_player1PlayedCards.First().getValue(), card.getValue()));
                 p1Pairs.Add(new Tuple<string, string>(_player1PlayedCards.Last().getValue(), card.getValue()));
@@ -87,8 +87,8 @@ namespace exercise.main
             if (p1 && p2)
             {
                 if (_core.GetValueOfCard(p1Result.Item1) > _core.GetValueOfCard(p2Result.Item1))
-                { this.victoryPair(_player1, p1Result); }
-                else { this.victoryPair(_player2, p2Result); };
+                { victoryPair(_player1, p1Result); }
+                else { victoryPair(_player2, p2Result); };
             }
             else if (p1)
             {
@@ -104,7 +104,7 @@ namespace exercise.main
             }
         }
 
-        internal void victoryPair(Player player, Tuple<string, string> winningCards) 
+        internal void victoryPair(Player player, Tuple<string, string> winningCards)
         {
             Console.WriteLine($"{player.getPlayerName()} won with a pair of {winningCards.Item1}'s!\nGame is over.");
         }
@@ -115,14 +115,14 @@ namespace exercise.main
             dealCardsToPlayers();
             dealCardsToPlayers();
             Console.WriteLine("Dealing 3 cards onto the table.");
-            for (int i = 0; i < 3; i++) 
+            for (int i = 0; i < 3; i++)
             {
                 dealCards();
             }
             Console.Write("Table finished setup\n\n");
         }
 
-        public void dealCardsToPlayers() 
+        public void dealCardsToPlayers()
         {
             _player1.takeCard(_deck.Deal());
             Console.WriteLine($"Dealer gave {_player1.getPlayerName()} a card.");
@@ -130,7 +130,7 @@ namespace exercise.main
             Console.WriteLine($"Dealer gave {_player2.getPlayerName()} a card.");
         }
 
-        public void dealCards() 
+        public void dealCards()
         {
             Card newCard = _deck.Deal();
             _deckCards.Add(newCard);
