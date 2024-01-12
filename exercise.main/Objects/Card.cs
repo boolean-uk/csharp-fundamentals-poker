@@ -37,6 +37,6 @@ namespace exercise.main.Objects
         }
         public int Value { get => _cardInfo.Item1; }
         public string Suit { get => _suitsSymbol[_cardInfo.Item2]; }
-        public int SuitNum { get => _cardInfo.Item2; }
+        public int SuitID { get => _cardInfo.Item2; }
     }
 }

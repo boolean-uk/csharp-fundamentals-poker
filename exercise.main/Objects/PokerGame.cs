@@ -65,6 +65,7 @@ namespace exercise.main.Objects
                 _board.DrawCard(_deck.Deal());
 
                 Thread.Sleep(100);
+                Console.WriteLine("\nShuffling...\n");
                 for(int i = 0; i < 3; i++)
                     Console.Beep(100, 80);
 
@@ -90,52 +91,162 @@ namespace exercise.main.Objects
             Console.WriteLine($"Your hand:");
             player.ShowCards();
             Console.Write("\n\n");
-            Console.WriteLine($"Choose to |bet|, |raise| or |stand|");
-            Console.Write("Decide to: ");
+            //Console.WriteLine($"Choose to |bet|, |raise| or |stand|");
+            Console.WriteLine($"Type to progress:");
+            //Console.Write("Decide to: ");
 
-            // Player Choice 
+            // TODO Player Choice:
             string playerChoice = Console.ReadLine();
         }
 
         private void ResolveGame()
         {
+            Console.Clear();
+            // Go through each player. Check if player has a scoreType higher than the other
+            List<Tuple<Player, ScoreType, int>> winningPlayerInfo = new List<Tuple<Player, ScoreType, int>>();
 
+            // Find player with the highest score
+            foreach( Player player in _players )
+            {
+                Tuple<int,ScoreType> playerScore = Score(player);
+                Tuple<Player, ScoreType, int> playerInfo = new Tuple<Player, ScoreType, int>(player, playerScore.Item2, playerScore.Item1);
+
+                if (player == _players.First())
+                    winningPlayerInfo.Add(playerInfo);
+
+
+                if (winningPlayerInfo.ElementAt(0).Item2 == Score(player).Item2)
+                    winningPlayerInfo.Add(playerInfo);
+                else if(winningPlayerInfo.ElementAt(0).Item2 < Score(player).Item2)
+                {
+                    winningPlayerInfo.Clear();
+                    winningPlayerInfo.Add(playerInfo);
+                }
+            }
+            // TODO: Check if ScoreType is the same, compare scoreValue
+            if( winningPlayerInfo.Count() > 1 )
+            {
+                int winningPlayerIndex = 0;
+                for (int i = 0; i < winningPlayerInfo.Count(); i++)
+                {
+                    if (winningPlayerInfo.ElementAt(winningPlayerIndex).Item3 < winningPlayerInfo.ElementAt(i).Item3 ){
+                        winningPlayerIndex = i;
+                    }
+                }
+                Console.WriteLine($"Cards on the board:");
+                _board.ShowCards();
+                Console.Write("\n\n");
+
+                Console.WriteLine($"Your hand:");
+                winningPlayerInfo.ElementAt(winningPlayerIndex).Item1.ShowCards();
+                Console.Write("\n\n");
+
+                Console.WriteLine($"{winningPlayerInfo.ElementAt(winningPlayerIndex).Item1.Name} wins with a {winningPlayerInfo.ElementAt(winningPlayerIndex).Item2}!");
+                return;
+            }
+
+            Console.WriteLine($"Cards on the board:");
+            _board.ShowCards();
+            Console.Write("\n\n");
+
+            Console.WriteLine($"{winningPlayerInfo.ElementAt(0).Item1.Name}'s hand:");
+            winningPlayerInfo.ElementAt(0).Item1.ShowCards();
+            Console.Write("\n\n");
+
+            // Write ending line
+            Console.WriteLine($"{winningPlayerInfo.ElementAt(0).Item1.Name} wins with a {winningPlayerInfo.ElementAt(0).Item2}!");
+            return;
         }
 
-        private int Score(Player player)
+
+        private Tuple<int,ScoreType> Score(Player player)
         {
-            List<Card> totalCards = new List<Card>();
-            totalCards.AddRange(_deck.CardsInDeck);
-            totalCards.AddRange(player.CardsInHand);
+            List<Card> totalCards = [.. _board.CardsInHand, .. player.CardsInHand];
 
             // COMPARE
             // Royal Flush
             if (RoyalFlush(totalCards))
-                return 100;
+                return new Tuple<int,ScoreType>( 100, ScoreType.RoyalFlush);
             // Straight Flush
             if (StraightFlush(totalCards))
-                return 100;
+                return new Tuple<int, ScoreType>(100, ScoreType.StraightFlush);
             // Four of a Kind
             if (FourOfAKind(totalCards))
-                return 100;
+                return new Tuple<int, ScoreType>(100, ScoreType.FourOfAKind);
             // Full House
             if (FullHouse(totalCards))
-                return 100;
+                return new Tuple<int, ScoreType>(100, ScoreType.FullHouse);
             // Flush
             if (Flush(totalCards))
-                return 100;
+                return new Tuple<int, ScoreType>(100, ScoreType.Flush);
             // Straight
             if (Straight(totalCards))
-                return 100;
+                return new Tuple<int, ScoreType>(100, ScoreType.Straight);
             // Three of a Kind
             if (ThreeOfAKind(totalCards))
-                return 100;
+                return new Tuple<int, ScoreType>(100, ScoreType.ThreeOfAKind);
             // Two Pair
-            if (TwoOfAPair(totalCards))
-                return 20;
+            if (TwoPair(totalCards))
+                return new Tuple<int, ScoreType>(100, ScoreType.TwoPair);
+            // Pair
+            if (Pair(totalCards))
+                return new Tuple<int, ScoreType>(100, ScoreType.Pair);
 
             // HighestCard
-            return HighestCard(totalCards);
+            return new Tuple<int, ScoreType>(HighestCard(totalCards), ScoreType.HighCard);
+        }
+
+        private bool TwoPair(List<Card> totalCards)
+        {
+            List<Card> duplicates = totalCards
+                .GroupBy(num => num)
+                .Where(group => group
+                .Count() >= 2)
+                .Select(group => group.Key).ToList();
+            return (duplicates.Count() >= 2) ? true : false;
+        }
+
+        enum ScoreType
+        {
+            HighCard,
+            Pair,
+            TwoPair,
+            ThreeOfAKind,
+            Straight,
+            Flush,
+            FullHouse,
+            FourOfAKind,
+            StraightFlush,
+            RoyalFlush
+        }
+
+        private string GetScoreType(ScoreType scoreType)
+        {
+            switch (scoreType)
+            {
+                case ScoreType.HighCard:
+                    return "High Card";
+                case ScoreType.Pair:
+                    return "Pair";
+                case ScoreType.TwoPair:
+                    return "Pair";
+                case ScoreType.ThreeOfAKind:
+                    return "Three of a Kind";
+                case ScoreType.Straight:
+                    return "Straight";
+                case ScoreType.Flush:
+                    return "Flush";
+                case ScoreType.FullHouse:
+                    return "Full House";
+                case ScoreType.FourOfAKind:
+                    return "Four of a Kind";
+                case ScoreType.StraightFlush:
+                    return "Straight Flush";
+                case ScoreType.RoyalFlush:
+                    return "Royal Flush";
+                default:
+                    return "???";
+            }
         }
 
         private int HighestCard(List<Card> totalCards)
@@ -153,70 +264,117 @@ namespace exercise.main.Objects
             return highestCard;
         }
 
-        private bool TwoOfAPair(List<Card> totalCards)
+        private bool Pair(List<Card> totalCards)
         {
-            if (totalCards.Count != totalCards.Distinct().Count())
-                return true;
-            
-            return false;
+            List<Card> duplicates = totalCards.GroupBy(num => num).Where(group => group.Count() >= 2).Select(group => group.Key).ToList();
+            return (duplicates.Count() > 0) ? true : false;
         }
 
         private bool ThreeOfAKind(List<Card> totalCards)
         {
-            throw new NotImplementedException();
+            List<Card> duplicates = totalCards.GroupBy(num => num).Where(group => group.Count() >= 3).Select(group => group.Key).ToList();
+            return (duplicates.Count() > 0) ? true : false;
         }
 
         private bool Straight(List<Card> totalCards)
         {
-            throw new NotImplementedException();
+            int lastNum = totalCards.ElementAt(0).Value;
+            int numCombo = 0;
+
+            totalCards.OrderByDescending(num => num.Value).Reverse().Distinct().ToList();
+
+            for (int i = 1; i < totalCards.Count(); i++)
+            {
+                if(lastNum == totalCards.ElementAt(i).Value -1)
+                    ++numCombo;
+                else
+                    numCombo = 0;
+                
+                lastNum = totalCards.ElementAt(i).Value;
+
+                if (numCombo == 5)
+                    return true;
+            }
+
+            return false;
         }
 
         private bool Flush(List<Card> totalCards)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < 8; i++)
+            if( totalCards.Count(c => c.SuitID == i) >= 5 )
+            {
+                return true;
+            }
+            return false;
         }
 
         private bool FullHouse(List<Card> totalCards)
         {
-            throw new NotImplementedException();
+            List<Card> duplicates = totalCards.GroupBy(num => num).Where(group => group.Count() >= 2).Select(group => group.Key).ToList();
+            // Check if there is more than two sets of cards that has two or more cards
+            if(duplicates.Count() >= 2)
+            {
+                // Check if there is a a set of tree cards
+                if (ThreeOfAKind(totalCards))
+                    return true;
+            }
+            return false;
         }
 
         private bool FourOfAKind(List<Card> totalCards)
         {
-            throw new NotImplementedException();
+            List<Card> duplicates = totalCards.GroupBy(num => num).Where(group => group.Count() >= 4).Select(group => group.Key).ToList();
+            return (duplicates.Count() > 0) ? true : false;
         }
 
         private bool StraightFlush(List<Card> totalCards)
         {
-            throw new NotImplementedException();
+            int lastNum = totalCards.ElementAt(0).Value;
+            int numCombo = 0;
+            int lastSuitID = totalCards.ElementAt(0).SuitID;
+
+            // Order by value ascending
+            totalCards.OrderByDescending(num => num.Value).Reverse();
+
+            for (int i = 1; i < totalCards.Count(); i++)
+            {
+                // Check if the next number is one higher than the last, and 
+                if (lastNum == totalCards.ElementAt(i).Value - 1 &&
+                    lastSuitID == totalCards.ElementAt(i).SuitID)
+                    
+                    ++numCombo;
+                else
+                    numCombo = 0;
+
+                lastNum = totalCards.ElementAt(i).Value;
+                lastSuitID = totalCards.ElementAt(i).SuitID;
+
+                if (numCombo == 5)
+                    return true;
+            }
+
+            return false;
         }
 
 
         private bool RoyalFlush(List<Card> totalCards)
         {
-            bool breakOut = false;
+            List<Card> highCards = totalCards.Where(c => c.Value >= 10).Select(c => c).ToList();
 
-            List<Card> cardsToComparePrev = new List<Card>();
-            List<Card> cardsToCompareCurrent = new List<Card>();
-            for (int i = 0; i < 8; i++)
-            {
-                Card targetCard = new Card(10, i);
+            highCards = highCards.OrderByDescending(c => c.SuitID).ThenBy(c => c.Value).ToList();
 
-                if (cardsToComparePrev.Contains(targetCard))
-                    cardsToComparePrev.Add(targetCard);
-            }
-
-            //if ()
-
-                for (int i = 0; i < cardsToComparePrev.Count(); i++)
+            // Set the list to only include cards with the same suit that has a count larger than 5. Removes the rest
+            for (int s = 0; s < 8; s++)
+                if (highCards.Count(c => c.SuitID == s) > 5)
                 {
-                    Card targetCard = new Card(11, cardsToComparePrev[i].SuitNum);
-                    if (totalCards.Contains(targetCard))
-                    {
-                        cardsToCompareCurrent.Add(targetCard);
-                    }
+                    highCards = highCards.Where(c => c.SuitID == s).ToList();
+
+                    // Check the high cards if there exists a flush. If so, then we got a Royal Flush
+                    if (Straight(highCards))
+                        return true;
+                    break;
                 }
-            //tempComparison
 
             return false;
         }
