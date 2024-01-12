@@ -12,36 +12,56 @@ namespace exercise.main.Objects
         public Player player1 = new Player();
         public Player player2 = new Player();
         Deck deck = new Deck();
-        List<Card> table = new List<Card>();
+        public List<Card> table = new List<Card>();
         public Pokergame(string namePlayer1, string namePlayer2) {
             player1.Name = namePlayer1;
             player2.Name = namePlayer2;
         }
+        public bool gameContinues = true;
 
-        
+
+
 
         public void Start()
         {
+            gameContinues = true;
             deck.Shuffle();
-            for (int i = 0; i < 2; i++) { player1.Draw(deck.Deal());player2.Draw(deck.Deal()); }
+            DealPlayers(2);
+            DealTable(3);
         }
-        public void Deal() 
+        void DealPlayers(int amount) 
         {
-            player1.Draw(deck.Deal()); player2.Draw(deck.Deal());
-        }
-        public bool checkWin(Player player) {
-            List<Card> playerHand = player.GetHand();
-
-
-            var winningHand = playerHand
-            .GroupBy(x => x.CardValue) // items with same CardValue are grouped together
-            .Where(x => x.Count() > 1); // filter groups where they have more than one member
-
-            if (winningHand != null)
+            if (amount < 1) { return; }
+            for (int i = 0; i < amount; i++)
             {
-                return true;
+                player1.Draw(deck.Deal()); player2.Draw(deck.Deal());
             }
-            return false;
+        }
+        public void DealTable(int amount)
+        {
+            if (amount < 1) { return; }
+            for (int i = 0; i < amount; i++)
+            {
+                table.Add(deck.Deal());
+            }
+        }
+        bool checkHand(Player player, List<Card> table) {
+            List<Card> playerHand = player.GetHand();
+            var check = playerHand.Concat(table).ToList();
+
+            var winningHand = check
+            .GroupBy(x => x.CardValue) // items with same CardValue are grouped together
+            .Where(x => x.Count() >= 2) // filter groups where they have more than one member
+            .ToList();
+
+            return winningHand.Count() > 0;
+        }
+        public void Checkwin()
+        {
+            if (checkHand(player1, table)) { Console.WriteLine(player1.Name + " Won "); gameContinues = false; }
+            if (checkHand(player2, table)) { Console.WriteLine(player2.Name + " Won "); gameContinues = false; }
+
+
         }
 
     }
