@@ -42,33 +42,7 @@ namespace exercise.main
             return result.Item1!=string.Empty ? true : false;
         }
 
-        public bool winningTriple(IEnumerable<Tuple<string, string, string>> hands, out Tuple<string, string, string> result)
-        {
-            result = new Tuple<string, string,string>(string.Empty, string.Empty, string.Empty);
-
-            foreach (var pair in hands)
-            {
-
-                if (pair.Item1 == pair.Item2 && pair.Item1 == pair.Item3)
-                {
-                    int valueOfCard = GetValueOfCard(pair.Item1);
-
-                    if (valueOfCard > temporaryWinner)
-                    {
-
-                        temporaryWinner = cardValues[pair.Item1];
-                        tempWinnerstring = pair.Item1;
-                        result = new Tuple<string, string, string>(tempWinnerstring, tempWinnerstring, tempWinnerstring);
-                    }
-                }
-            }
-
-            return result.Item1 != string.Empty ? true : false;
-
-        }
-
-
-            public int GetValueOfCard(string card)
+                  public int GetValueOfCard(string card)
         {
 
             if (cardValues.Count ==0 ) { populateDictionary(); }

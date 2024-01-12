@@ -122,7 +122,7 @@ public class Tests
     [Test]
     public void ScenarioTripleHands()//Tests Extennsion - hand with triples
     {
-        Core core = new Core();
+        Extension Extension = new Extension();
 
         List<Tuple<string, string,string>> hands = new List<Tuple<string, string,string>>
         {
@@ -132,7 +132,7 @@ public class Tests
             new Tuple<string, string, string>("3","3", "3")
         };
         Tuple<string, string, string> winner;
-        bool result = core.winningTriple(hands, out winner);
+        bool result = Extension.winningThree(hands, out winner);
 
         Assert.That(result, Is.True);
 
