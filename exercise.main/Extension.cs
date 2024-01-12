@@ -22,7 +22,8 @@ namespace exercise.main
                     if (result.Item1 != string.Empty && GetValueOfCard(pair.Item1) > GetValueOfCard(result.Item1))
                     {
                         result = pair;
-                        if (GetValueOfCard(result.Item1) > GetValueOfCard(pair.Item3))
+
+                        if (GetValueOfCard(result.Item1) < GetValueOfCard(pair.Item3))
                         {
                             result = pair;
                         }
@@ -30,12 +31,12 @@ namespace exercise.main
                     else if (result.Item1 == string.Empty)
                     {
                         result = pair;
+                        
                     }
                 }
                 
             }
-
-            return false;
+            return result.Item1 != string.Empty ? true : false;
         }
 
         public int GetValueOfCard(string card)

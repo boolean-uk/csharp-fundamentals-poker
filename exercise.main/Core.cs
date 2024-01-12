@@ -32,11 +32,8 @@ namespace exercise.main
                     }
                     
                     
-                    
                 }
             }
-
-          
 
             return result.Item1!=string.Empty ? true : false;
         }
