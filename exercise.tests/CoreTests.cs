@@ -55,8 +55,6 @@ public class Tests
     [Test]
     public void Scenario2()
     {
-
-
         Core core = new Core();
 
         List<Tuple<string, string>> hand = new List<Tuple<string, string>>
