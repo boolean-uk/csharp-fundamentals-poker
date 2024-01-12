@@ -1,2 +1,22 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿
+using exercise.main;
+
+Console.WriteLine("Enter the name of Player 1: ");
+string player1 = Console.ReadLine();
+Console.WriteLine("Enter the name of Player 2: ");
+string player2 = Console.ReadLine();
+Console.WriteLine();
+
+while (true)
+{
+    PokerGame game = new PokerGame(player1, player2);
+    game.startGame();
+    Console.WriteLine();
+    Console.WriteLine("Play again? (anything/n)");
+    if (Console.ReadLine() == "n")
+    {
+        break;
+    }
+
+    Console.Clear();
+}
