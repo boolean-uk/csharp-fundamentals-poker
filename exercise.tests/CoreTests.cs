@@ -20,7 +20,6 @@ public class Tests
             new Tuple<string, string>("3","7")
         };
         Tuple<string, string> winner;
-        
         bool result = core.winningPair(hand, out winner);
 
         Assert.That(result, Is.False);
@@ -28,7 +27,6 @@ public class Tests
         Assert.That(winner.Item2, Is.EqualTo(String.Empty));
 
     }
-
     //{("K","5"),("2","2")} => true out ("2","2")
     public void Scenario1b()
     {
