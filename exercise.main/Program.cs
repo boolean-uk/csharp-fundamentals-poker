@@ -13,10 +13,8 @@ List<Card> cards = new List<Card>()
     new Card("8", "heart"),
     new Card("2", "spade")
 };
-Deck deck = new Deck(cards);
-Card rnd = deck.Deal();
 
-Console.WriteLine($"val: {rnd._cardValue}, suite: {rnd.suit}");
+PokerGame p = new PokerGame();
 
 /*
 List<Tuple<string, string>> hand = new List<Tuple<string, string>>

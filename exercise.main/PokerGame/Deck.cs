@@ -9,9 +9,9 @@ namespace exercise.main.PokerGame
     internal class Deck
     {
         public List<Card> _cards {  get; set; }
-        public Deck(List<Card> cards) 
+        public Deck() 
         {
-            this._cards = cards;
+            this._cards = this.GenerateDeck();
         }
 
         public List<Card> Shuffle(List<Card> cards) 
@@ -34,6 +34,43 @@ namespace exercise.main.PokerGame
             Card cardToDeal = _cards[index];
             this._cards.RemoveAt(index);
             return cardToDeal;
+        }
+
+        public List<Card> GenerateDeck() 
+        {
+            string[] suties = new string[] { "heart","spade","something1", "something2"};
+            Dictionary<int, string> specialCards = new Dictionary<int, string>()
+            {
+                {11, "J"},
+                {12, "Q"},
+                {13, "K"},
+            };
+
+            List<Card> cards = new List<Card>();
+            for (int i = 0; i < 4; i++) 
+            {
+                Card newCard = new Card("A", suties[i]);
+                cards.Add(newCard);
+            }
+
+            for (int i = 2; i <= 13; i++) 
+            {
+                for (int j = 0; j < 4; j++) 
+                {
+                    if (specialCards.ContainsKey(i))
+                    {
+                        Card newCard = new Card(specialCards[i], suties[j]);
+                        cards.Add(newCard);
+                    }
+                    else
+                    {
+                        Card newCard = new Card(i.ToString(), suties[j]);
+                        cards.Add(newCard);
+                    }
+                }
+            }
+            return cards;
+            
         }
    }
 }
