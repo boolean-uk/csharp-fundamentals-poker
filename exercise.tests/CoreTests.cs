@@ -114,4 +114,26 @@ public class Tests
         Assert.That(result, Is.EqualTo(value));
     }
 
+    [Test]
+    public void testTriplet()
+    {      
+        Extension e = new Extension();
+
+        List<Tuple<string, string, string>> hand = new List<Tuple<string, string, string>>
+        {
+            new Tuple<string, string, string>("K", "5","K"),
+            new Tuple<string, string, string>("3","7", "K"),
+            new Tuple<string, string, string>("9","9", "9")
+        };
+        Tuple<string, string, string> winner;
+
+        bool result = e.winningThree(hand, out winner);
+
+        Assert.That(result, Is.True);
+        Assert.That(winner.Item1, Is.EqualTo("9"));
+        Assert.That(winner.Item2, Is.EqualTo("9"));
+        Assert.That(winner.Item3, Is.EqualTo("9"));
+
+    }
+
 }
