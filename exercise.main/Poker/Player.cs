@@ -17,7 +17,7 @@ namespace exercise.main.Poker
         }
         public Player()
         {
-            Name = "John Doe (anon player)";
+            Name = "John Doe(anon)";
             Cards = new List<Card>();
         }
 
