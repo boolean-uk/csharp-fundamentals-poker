@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace exercise.main
 {
-    internal class Deck
+    public class Deck
     {
         List<Card> _cardDeck = new List<Card> ();
         List<string> _suitCount = new List<string>

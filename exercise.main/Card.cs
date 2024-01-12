@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace exercise.main
 {
-    internal class Card
+    public class Card
     {
-        string _suit { get; set; }
+        public string _suit { get; set; }
 
-        string _value { get; set; }
+        public string _value { get; set; }
 
         public Card(string suit, string value)
         {

@@ -6,9 +6,32 @@ namespace exercise.tests;
 public class Tests
 {
 
+
     [Test]
     public void extension2Tests()
     {
+        Player player1 = new Player("Oneal");
+        Deck deck1 = new main.Deck();
+        deck1.Shuffle();
+        player1.AddCard(deck1.Deal());
+        player1.AddCard(deck1.Deal());
+
+        Assert.That(player1.ShowHand != null);
+
+    }
+
+    [Test]
+    public void extension2Tests1()
+    {
+        Player player1 = new Player("Oneal");
+        Deck deck1 = new main.Deck();
+        deck1.Shuffle();
+        // player1.AddCard(deck1.Deal());
+        //  player1.AddCard(deck1.Deal());
+
+        //player1.RemoveCards();
+
+        Assert.That(player1.ShowHand().First() ==  ;
 
     }
     [Test]
