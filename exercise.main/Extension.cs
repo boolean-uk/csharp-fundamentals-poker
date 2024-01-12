@@ -13,7 +13,18 @@ namespace exercise.main
         {
             result = new Tuple<string, string, string>(string.Empty, string.Empty, string.Empty);
 
-            return false;
+            var winners = hand.Where(x => x.Item1 == x.Item2 && x.Item1 == x.Item3);
+            result = winners.MaxBy(x => Core.valuePairs[x.Item1] + Core.valuePairs[x.Item2] + Core.valuePairs[x.Item3])
+                ?? new Tuple<string, string, string>(string.Empty, string.Empty, string.Empty);
+
+            if (result.Item1 == string.Empty && result.Item2 == string.Empty && result.Item3 == string.Empty)
+            {
+                return false;
+            }
+
+            bool isWinningHand = result.Item1 == result.Item2 && result.Item1 == result.Item3;
+
+            return isWinningHand;
         }
 
     }
