@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static exercise.main.UngradedExtension;
-using System.Threading;
 
 namespace exercise.main
 {
@@ -13,16 +11,31 @@ namespace exercise.main
         public class Card
         {
             public string _value { get; set; }
-            public string Suit { get; set; }
+            public string _suit { get; set; }
 
             public Card(string value, string suit)
             {
                 _value = value;
-                Suit = suit;
+                _suit = suit;
             }
             public void Display()
             {
-                Console.Write($"{_value}|{Suit}  ");
+                Console.BackgroundColor = ConsoleColor.White;
+                switch (_suit)
+                {
+                    case "H":
+                    case "D":
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        break;
+                    case "C":
+                    case "S":
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        break;
+                }
+
+                Console.Write($"{_value}|{_suit}");
+
+                Console.BackgroundColor = ConsoleColor.DarkGreen;
             }
             public int NumericValue()
             {
@@ -108,10 +121,12 @@ namespace exercise.main
             }
             public void Display()
             {
-                Console.WriteLine($"{Name}: ");
+                Utils.WriteNormal($"{Name}: \n");
+                Utils.WriteNormal(" ");
                 foreach (Card card in Hand)
                 {
                     card.Display();
+                    Utils.WriteNormal(" ");
                 }
             }
             public void ClearHand() 
@@ -132,31 +147,12 @@ namespace exercise.main
                 _table = new List<Card>();
                 _winner = 0;
             }
-            public void start()
-            {
-                foreach (Player player in _players)
-                    player.ClearHand(); render();
 
-                foreach (Player player in _players)
-                    _deck.Deal(player); render();
-
-                foreach (Player player in _players)
-                    _deck.Deal(player); render();
-
-                _deck.Deal(_table); render();
-                _deck.Deal(_table); render();
-                _deck.Deal(_table); render();
-
-                //Thread.Sleep(2000);
-
-                _deck.Deal(_table); render();
-                _deck.Deal(_table); render();
-
-                finish();
-            }
             public void render()
             {
                 Console.Clear();
+
+                Console.BackgroundColor = ConsoleColor.DarkGreen;
 
                 foreach (Player player in _players)
                 {
@@ -164,13 +160,45 @@ namespace exercise.main
                     Console.WriteLine("\n");
                 }
 
-                Console.WriteLine("Table: ");
+                Utils.WriteNormal("\nTable: \n");
+                Utils.WriteNormal(" ");
                 foreach (Card card in _table)
+                {
                     card.Display();
+                    Utils.WriteNormal(" ");
+                }
 
-                //Thread.Sleep(400);
+                Thread.Sleep(400);
             }
-            public void finish()
+
+            public void start()
+            {
+                _deck.Shuffle();
+
+                foreach (Player player in _players)
+                    player.ClearHand(); render();
+
+                foreach (Player player in _players)
+                    _deck.Deal(player); render();
+
+
+                foreach (Player player in _players)
+                    _deck.Deal(player); render();
+
+                _deck.Deal(_table); render();
+                _deck.Deal(_table); render();
+                _deck.Deal(_table); render();
+
+                Thread.Sleep(1000);
+
+                _deck.Deal(_table); render();
+                _deck.Deal(_table); render();
+
+                writeWinners();
+                Console.ResetColor();
+            }
+
+            public void writeWinners()
             {
                 List<Tuple<Player, Card, int>> scores = new List<Tuple<Player, Card, int>>();
 
@@ -179,30 +207,71 @@ namespace exercise.main
                     foreach (Card cardFromHand in player.Hand)
                     {
                         int match = 0;
-                        foreach (Card cardFromTable in _table)
+
+                        foreach (Card otherCardInHand in player.Hand)
                         {
-                            if (cardFromHand._value == cardFromTable._value && cardFromHand.Suit == cardFromTable.Suit)
+                            if (otherCardInHand != cardFromHand && cardFromHand._value == otherCardInHand._value)
                                 match++;
                         }
+
+                        foreach (Card cardFromTable in _table)
+                        {
+                            if (cardFromHand._value == cardFromTable._value)
+                                match++;
+                        }
+
                         scores.Add(new Tuple<Player, Card, int>(player, cardFromHand, match));
                     }
                 }
 
-                var bestScores = scores.OrderByDescending(score => score.Item3)
-                                       .ThenByDescending(score => score.Item2.NumericValue())
-                                       .ToList();
+                var mostMatches = scores.Max(score => score.Item3);
+                var highestValueWithMostMatches = scores.Where(score => score.Item3 == mostMatches)
+                                                        .Max(score => score.Item2.NumericValue());
 
-                var highestScore = bestScores.First().Item3;
+                var winners = scores.Where(score => score.Item3 == mostMatches && score.Item2.NumericValue() == highestValueWithMostMatches)
+                                    .ToList();
 
-                var winners = bestScores.Where(score => score.Item3 == highestScore).ToList();
+                var distinctWinners = winners.GroupBy(w => w.Item1)
+                                 .Select(group => group.First())
+                                 .ToList();
 
-                Console.WriteLine("\nWinner(s):");
-                foreach (var winner in winners)
+                Utils.WriteNormal("\n\n\nWinner(s):\n");
+                foreach (var winner in distinctWinners)
                 {
-                    Console.WriteLine($"{winner.Item1.Name} with {winner.Item2.Display}");
+                    Utils.WriteNormal($"{winner.Item1.Name} with ");
+
+                    // Display all matching cards in the winner's hand
+                    foreach (var card in winner.Item1.Hand)
+                    {
+                        if (card.NumericValue() == highestValueWithMostMatches)
+                        {
+                            card.Display();
+                            Utils.WriteNormal(" ");
+                        }
+                    }
+
+                    // Display all matching cards on the table
+                    foreach (var card in _table)
+                    {
+                        if (card.NumericValue() == highestValueWithMostMatches)
+                        {
+                            card.Display();
+                        }
+                    }
+
+                    Console.WriteLine();
                 }
             }
-
         }
+    }
+}
+
+public class Utils
+{
+    public static void WriteNormal(String text)
+    {
+        Console.BackgroundColor = ConsoleColor.DarkGreen;
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write(text);
     }
 }
