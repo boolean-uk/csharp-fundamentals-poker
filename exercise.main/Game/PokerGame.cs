@@ -100,13 +100,13 @@ namespace exercise.main.Game
             }
             else
             {
-                Console.WriteLine("Game over, 5 cards have been dealt. \n No one wins.");
+                Console.WriteLine("Game over, 5 cards have been dealt. \nNo one wins.\n");
             }
         }
 
         internal void victoryPair(Player player, Tuple<string, string> winningCards)
         {
-            Console.WriteLine($"{player.getPlayerName()} won with a pair of {winningCards.Item1}'s!\nGame is over.");
+            Console.WriteLine($"{player.getPlayerName()} won with a pair of {winningCards.Item1}'s!\nGame is over.\n");
         }
 
         public void setTable()
@@ -135,6 +135,16 @@ namespace exercise.main.Game
             Card newCard = _deck.Deal();
             _deckCards.Add(newCard);
             Console.WriteLine($"{newCard.getValue()} of {newCard.getSuit()} was added to the table.");
+        }
+
+        public void playGame()
+        {
+
+            dealCards();
+            dealCards();
+
+            showCards();
+            checkVictory();
         }
     }
 }
