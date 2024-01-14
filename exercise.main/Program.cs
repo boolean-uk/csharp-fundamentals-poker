@@ -53,12 +53,13 @@ while (goOn)
     pokerGame.DealTable();
     pokerGame.DealTable();
 
+
     Console.WriteLine();
 
     Random random = new Random();
     List<Tuple<Player, List<Card>>> results = new List<Tuple<Player, List<Card>>>();
 
-    int randomNumber = random.Next(6);
+    int randomNumber = random.Next(3);
     if (randomNumber == 0)
     {
         results = pokerGame.GetResults();
@@ -67,21 +68,7 @@ while (goOn)
         Console.WriteLine($"{worstHand.Item1.Name} folds (bad hand?).");
         Console.ReadLine();
     }
-    Console.WriteLine("The table recieves another card");
-    Console.ReadLine();
-    pokerGame.DealTable();
-
-    randomNumber = random.Next(4);
-    if (randomNumber == 0)
-    {
-
-        results = pokerGame.GetResults();
-        var worstHand = results.Last();
-        pokerGame.Players.Remove(worstHand.Item1);
-        Console.WriteLine($"{worstHand.Item1.Name} folds (bad hand?).");
-        Console.ReadLine();
-    }
-    Console.WriteLine("The table recieves another card");
+    Console.WriteLine("The table recieves a fourth card");
     Console.ReadLine();
     pokerGame.DealTable();
 
@@ -95,7 +82,7 @@ while (goOn)
         Console.WriteLine($"{worstHand.Item1.Name} folds (bad hand?).");
         Console.ReadLine();
     }
-    Console.WriteLine("The table recieves another card");
+    Console.WriteLine("The table recieves a fifth card");
     Console.ReadLine();
     pokerGame.DealTable();
 
@@ -103,6 +90,16 @@ while (goOn)
     Console.WriteLine();
     Console.WriteLine();
     Console.WriteLine("Show your hands players");
+
+    foreach ( var player in pokerGame.Players ) { 
+        Console.WriteLine(player.Name+" shows "); 
+        foreach (Card c in player.ShowCards())
+        {
+            Console.WriteLine($"[{c.Value} of {c.Suit}] ");
+        }
+    
+    }
+
     Console.ReadLine();
     Console.WriteLine();
 
@@ -117,8 +114,8 @@ while (goOn)
         {4, "four of a kind"}
     };
 
-    Console.WriteLine(results[0].Item1.Name + $" won the round with {handType[numOfDupes]}");
-    foreach (Card c in results[0].Item2)
+    Console.WriteLine(results.First().Item1.Name + $" won the round with {handType[numOfDupes]}");
+    foreach (Card c in results.First().Item2)
     {
         Console.WriteLine($"[{c.Value} of {c.Suit}] ");
     }

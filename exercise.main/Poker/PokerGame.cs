@@ -33,7 +33,9 @@ namespace exercise.main.Poker
 
         public void DealTable()
         {
-            Table.Add(Deck.Deal());
+            Card card = Deck.Deal();
+            Console.WriteLine($"[{card.Value} of {card.Suit}] ");
+            Table.Add(card);
         }
 
         public void DealPlayer(Player player)
