@@ -69,8 +69,8 @@ while (goOn)
         Console.ReadLine();
     }
     Console.WriteLine("The table recieves a fourth card");
-    Console.ReadLine();
     pokerGame.DealTable();
+    Console.ReadLine();
 
     randomNumber = random.Next(2);
     if (randomNumber == 0)
@@ -83,13 +83,15 @@ while (goOn)
         Console.ReadLine();
     }
     Console.WriteLine("The table recieves a fifth card");
-    Console.ReadLine();
+    
     pokerGame.DealTable();
+    Console.ReadLine();
 
     Console.WriteLine();
     Console.WriteLine();
     Console.WriteLine();
     Console.WriteLine("Show your hands players");
+    Console.ReadLine();
 
     foreach ( var player in pokerGame.Players ) { 
         Console.WriteLine(player.Name+" shows "); 
@@ -97,9 +99,14 @@ while (goOn)
         {
             Console.WriteLine($"[{c.Value} of {c.Suit}] ");
         }
-    
+        Console.ReadLine();
+
     }
 
+    Console.WriteLine();
+    Console.WriteLine();
+    Console.WriteLine();
+    Console.WriteLine("The players look at the final result");
     Console.ReadLine();
     Console.WriteLine();
 
@@ -114,15 +121,15 @@ while (goOn)
         {4, "four of a kind"}
     };
 
-    Console.WriteLine(results.First().Item1.Name + $" won the round with {handType[numOfDupes]}");
+    Console.WriteLine(results.First().Item1.Name.ToUpper() + $" won the round with {handType[numOfDupes]}!");
     foreach (Card c in results.First().Item2)
     {
         Console.WriteLine($"[{c.Value} of {c.Suit}] ");
     }
-
     results.RemoveAt(0);
 
-    Console.WriteLine("Against ");
+    Console.WriteLine();
+    Console.Write("Against ");
 
     if (results.Count == 0)
     {
@@ -135,10 +142,13 @@ while (goOn)
         Console.WriteLine(t.Item1.Name + $"'s {handType[numOfDupes]} ");
         foreach (Card c in t.Item2)
         {
-            Console.WriteLine($"[{c.Value} of {c.Suit}] ");
+            Console.WriteLine( $"[{c.Value} of {c.Suit}] ");
         }
     }
 
+    Console.WriteLine();
+    Console.WriteLine();
+    Console.WriteLine();
     Console.WriteLine();
     Console.WriteLine();
     Console.WriteLine();
