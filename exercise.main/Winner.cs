@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Markup;
+using System.Xml.Schema;
 
 namespace exercise.main
 {
@@ -20,47 +23,61 @@ namespace exercise.main
         List<Card> _flop = new List<Card>();
         Core core = new Core();
 
-        public Player DetermineWinner()
+        public Player DetermineWinner(List<Player> players, List<Card> flop)
         {
-            
-            foreach (Player player in _players)
+            _flop = flop;
+            Player winner = null;
+            int highestScore = 0;
+            foreach (Player player in players)
             {
-
+                if (!player.IsPlaying) continue;
+                int score = Score(player.Hand, _flop);
+                if (score > highestScore)
+                {
+                    winner = player;
+                    highestScore = score;
+                }
 
             }
-            return null;
+            return winner;
 
         }
 
         
         public List<List<Card>> AllCombinations(List<Card> hand, List<Card> table)
         {
-            List<List<Card>> result = [table];
-            List<Card> duplicate = new List<Card>(table);
+            List<List<Card>> result = [];
+          //  List<Card> duplicate = new List<Card>(table);
+            Card[] combi = new Card[5];
+
             foreach (Card handCard in hand)
             {
-                foreach (Card tableCard in duplicate)
+                combi[0] = handCard;
+                for (int j = 0; j < 5; j++)
                 {
-                    table.Remove(tableCard);
-                    table.Add(handCard);
-                    result.Add(table);
-                    table.Remove(handCard);
-                    table.Add(tableCard);
+                    for (int i = 1; i < 5; i++)
+                    {
+                        combi[i] = table[(i + j) % 5];
+                    }
+                    result.Add(combi.ToList());
                 }
             }
-            foreach (Card tableCard in duplicate)
+            combi[0] = hand[0];
+            combi[1] = hand[1];
+            for (int i = 0; i < 5; i++)
             {
-                table.Remove(tableCard);
-                foreach (Card card in duplicate)
+                for (int j = i + 1; j < 5; j ++)
                 {
-                    table.Remove(card);
-                    table.Concat(hand);
-                    result.Add(table);
-                    table.RemoveAll(hand.Contains);
-                    table.Add(card);
+                    for (int k = j+1; k < 5; k++)
+                    {
+                        combi[2] = table[i];
+                        combi[3] = table[j];
+                        combi[4] = table[k];
+                        result.Add(combi.ToList());
+                    }
                 }
-                table.Add(tableCard);
             }
+
             return result;
         }
          
@@ -70,7 +87,7 @@ namespace exercise.main
         /// </summary>
         /// <param name="hand"></param>
         /// <returns></returns>
-        private int Score(List<Card> hand)
+        public int Score(List<Card> hand, List<Card> _flop)
         {
             List<List<Card>> allCombos = AllCombinations(hand, _flop);
             int PlayerScore = 0;
@@ -82,48 +99,49 @@ namespace exercise.main
                     PlayerScore = RoyalFlush(combo);
                     continue;
                 }
-                if (PlayerScore < 800 && StraightFlush(combo) > 0)
+                if (PlayerScore < 900 && StraightFlush(combo) > PlayerScore)
                 {
                     PlayerScore = StraightFlush(combo);
                     continue;
                 }
-                if (PlayerScore < 700 && FourOfAKind(combo) > 0)
+                if (PlayerScore < 800 && FourOfAKind(combo) > PlayerScore)
                 {
                     PlayerScore = FourOfAKind(combo);
                     continue;
                 }
-                if (PlayerScore < 600 && FullHouse(combo) > 0)
+                if (PlayerScore < 700 && FullHouse(combo) > PlayerScore)
                 {
                     PlayerScore = FullHouse(combo);
                     continue;
                 }
-                if (PlayerScore < 500 && Flush(combo) > 0)
+                if (PlayerScore < 600 && Flush(combo) > PlayerScore)
                 {
                     PlayerScore = Flush(combo);
                     continue;
                 }
 
-                if (PlayerScore < 400 && Straight(combo) > 0)
+                if (PlayerScore < 500 && Straight(combo) > PlayerScore)
                 {
                     PlayerScore = Straight(combo);
                     continue;
                 }
-                if (PlayerScore < 300 && ThreeOfAKind(combo) > 0)
+                if (PlayerScore < 400 && ThreeOfAKind(combo) > PlayerScore)
                 {
                     PlayerScore = ThreeOfAKind(combo);
                     continue;
                 }
-                if (PlayerScore < 200 && TwoPairs(combo) > 0)
+                if (PlayerScore < 300 && TwoPairs(combo) > PlayerScore)
                 {
                     PlayerScore = TwoPairs(combo);
                     continue;
                 }
-                if (PlayerScore < 100 && Pair(combo) > 0)
+                if (PlayerScore < 200 && Pair(combo) > PlayerScore)
                 {
                     PlayerScore = Pair(combo);
                     continue;
                 }
-                PlayerScore = HighCard(combo);
+                if (PlayerScore < 20 && HighCard(combo) > PlayerScore) 
+                    PlayerScore = HighCard(combo);
             }
 
             return PlayerScore;
@@ -136,6 +154,10 @@ namespace exercise.main
         /// <returns></returns>
         public int RoyalFlush(List<Card> hand)
         {
+            if (Flush(hand) > 0 && Straight(hand) == 414)
+            {
+                return 900;
+            }
             return 0;
         }
         /// <summary>
@@ -145,6 +167,10 @@ namespace exercise.main
         /// <returns></returns>
         public int StraightFlush(List<Card> hand)
         {
+            if (Flush(hand) > 0 && Straight(hand) > 0)
+            {
+                return Straight(hand) + 400;
+            }
             return 0;
         }
         /// <summary>
@@ -154,16 +180,29 @@ namespace exercise.main
         /// <returns></returns>
         public int FourOfAKind(List<Card> hand)
         {
+            IEnumerable<char> values = hand.SelectMany(x => x.Value).Distinct() ;
+            if (values.Count() > 2) return 0;
+            foreach (char card in values)
+            {
+                if (hand.Count(x => x.Value == card.ToString()) == 4) return 700 + core.GetValueOfCard(card.ToString());            
+            }
             return 0;
+
         }
 
         /// <summary>
-        /// Takes 5 cards, determines whether it's a Full house. Returns 600 + value of highest card if it is.
+        /// Takes 5 cards, determines whether it's a Full house. Returns 600 + value of triple card if it is.
         /// </summary>
         /// <param name="hand"></param>
         /// <returns></returns>
         public int FullHouse(List<Card> hand)
         {
+            IEnumerable<char> values = hand.SelectMany(x => x.Value).Distinct();
+            if (values.Count() > 2) return 0;
+            foreach (char card in values)
+            {
+                if (hand.Count(x => x.Value == card.ToString()) == 3) return 600 + core.GetValueOfCard(card.ToString());
+            }
             return 0;
         }
 
@@ -174,7 +213,18 @@ namespace exercise.main
         /// <returns></returns>
         public int Flush(List<Card> hand)
         {
-            return 0;
+        //    Console.WriteLine("Check for flush: " + hand.Count);
+            int handValue = core.GetValueOfCard(hand[0].Value); 
+            for (int i = 1; i < hand.Count; i++)
+            {
+         //       Console.WriteLine(hand[0].ToString() + "   " + hand[i].ToString());
+                if (hand[0].Suit == hand[i].Suit) 
+                    handValue += core.GetValueOfCard(hand[i].Value);
+                else return 0;
+
+            }
+         //   Console.WriteLine("Flush found");
+            return 500 + handValue;
         }
 
         /// <summary>
@@ -201,6 +251,11 @@ namespace exercise.main
         /// <returns></returns>
         public int ThreeOfAKind(List<Card> hand)
         {
+            IEnumerable<char> values = hand.SelectMany(x => x.Value).Distinct();
+            foreach (char card in values)
+            {
+                if (hand.Count(x => x.Value == card.ToString()) == 3) return 300 + core.GetValueOfCard(card.ToString());
+            }
             return 0;
         }
 
@@ -211,6 +266,19 @@ namespace exercise.main
         /// <returns></returns>
         public int TwoPairs(List<Card> hand)
         {
+            int pairs = 0;
+            int valuePairs = 0;
+            IEnumerable<char> values = hand.SelectMany(x => x.Value).Distinct();
+            foreach (char card in values)
+            {
+                if (hand.Count(x => x.Value == card.ToString()) == 2)
+                {
+                    pairs++;
+                    valuePairs += core.GetValueOfCard(card.ToString());
+                }
+                
+            }
+            if (pairs == 2) return 200 + valuePairs;
             return 0;
         }
 
@@ -221,6 +289,11 @@ namespace exercise.main
         /// <returns></returns>
         public int Pair(List<Card> hand)
         {
+            IEnumerable<char> values = hand.SelectMany(x => x.Value).Distinct();
+            foreach (char card in values)
+            {
+                if (hand.Count(x => x.Value == card.ToString()) == 2) return 100 + core.GetValueOfCard(card.ToString());
+            }
             return 0;
         }
 
@@ -231,20 +304,16 @@ namespace exercise.main
         /// <returns></returns>
         public int HighCard(List<Card> hand)
         {
-            return 0;
-        }
-/*
-        private int Straight(List<Card> hand)
-        {
             List<int> values = new List<int>();
             foreach (Card card in hand)
             {
                 values.Add(core.GetValueOfCard(card.Value));
             }
             values.Sort();
-            if (values.Zip(values.Skip(1), (l, r) => l + 1 == r).All(t => t)) return 900 + values[0];
-            else return 0;
+            return values.Last();
         }
+/*
+
         private int Duo(List<Card> hand)
         {
             int amountDuos = 0;
