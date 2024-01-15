@@ -9,6 +9,10 @@ namespace exercise.main.Classes
     public class Deck
     {
         List<Card> _deck = new List<Card>();
+
+        //Returns the list of cards in deck
+        public List<Card> Cards { get { return _deck; } }
+
         public Deck()
         {
             //populate deck list
@@ -19,8 +23,14 @@ namespace exercise.main.Classes
 
         }
 
+        public void RegenerateDeck()
+        {
+            Generate();
+            Shuffle();
+        }
+
         //clears deck and generates a new deck of cards
-        public void Generate()
+        private void Generate()
         {
             _deck.Clear();
             for (int i = 0; i < 4; i++)
@@ -49,7 +59,7 @@ namespace exercise.main.Classes
         }
 
 
-        public void Shuffle()
+        private void Shuffle()
         {
             //suffles deck
             Random rnd = new Random();
@@ -65,7 +75,6 @@ namespace exercise.main.Classes
         }
 
 
-        //Returns the list of cards in deck
-        public List<Card> Cards { get { return _deck; } }
+        
     }
 }

@@ -24,5 +24,17 @@ namespace exercise.main.Classes
         {
             Console.WriteLine($"{_value}{_suit}");
         }
+
+        public int ParseValue()
+        {
+            switch (_value)
+            {
+                case "A": return 14;
+                case "K": return 13;
+                case "Q": return 12;
+                case "J": return 11;
+                default: return Int32.Parse(_value);
+            }
+        }
     }
 }
