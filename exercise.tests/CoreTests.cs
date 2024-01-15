@@ -30,6 +30,7 @@ public class Tests
     }
 
     //{("K","5"),("2","2")} => true out ("2","2")
+    [Test]
     public void Scenario1b()
     {
 
@@ -45,7 +46,7 @@ public class Tests
 
         bool result = core.winningPair(hand, out winner);
 
-        Assert.That(result, Is.False);
+        Assert.That(result, Is.True);
         Assert.That(winner.Item1, Is.EqualTo("2"));
         Assert.That(winner.Item2, Is.EqualTo("2"));
 
