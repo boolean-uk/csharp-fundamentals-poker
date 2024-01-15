@@ -1,2 +1,12 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿
+using exercise.main;
+
+PokerGame pokerGame = new PokerGame();
+
+Console.WriteLine("Poker game");
+Console.WriteLine();
+pokerGame.startGame();
+
+
+
+
