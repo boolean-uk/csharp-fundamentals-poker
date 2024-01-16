@@ -11,7 +11,7 @@ namespace exercise.main
         private List<Card> _cards;
         private List<string> _suits = new List<string>() 
         {
-            "hearts", "clubs", "diamonds", "spades" 
+            "H", "C", "D", "S" 
         };
         private Dictionary<int, string> _cardValues = new Dictionary<int, string>()
         {
@@ -50,6 +50,11 @@ namespace exercise.main
 
         public Card Deal()
         {
+            if (_cards.Count == 0)
+            {
+                throw new Exception("Deck is empty");
+            }
+
             Card card = _cards[_cards.Count-1];
             _cards.RemoveAt(_cards.Count-1);
             return card;

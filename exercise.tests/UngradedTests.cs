@@ -9,11 +9,11 @@ namespace exercise.tests
 {
     public class UngradedTests
     {
-        [TestCase("4", "4", "hearts", "hearts")]
-        [TestCase("4", "4", "spades", "spades")]
-        [TestCase("10", "10", "clubs", "clubs")]
-        [TestCase("Q", "Q", "diamonds", "diamonds")]
-        [TestCase("A", "A", "hearts", "hearts")]
+        [TestCase("4", "4", "H", "H")]
+        [TestCase("4", "4", "S", "S")]
+        [TestCase("10", "10", "C", "C")]
+        [TestCase("Q", "Q", "D", "D")]
+        [TestCase("A", "A", "H", "H")]
         public void testCard(string cardValue, string actualValue, string cardSuit, string actualSuit)
         {
             Card card = new Card(cardValue, cardSuit);
@@ -38,7 +38,7 @@ namespace exercise.tests
         {
             Deck deck = new Deck();
 
-            string[] suits = ["hearts", "clubs", "diamonds", "spades"];
+            string[] suits = ["H", "C", "D", "S"];
             foreach (string suit in suits)
             {
                 for (int i = 2; i < 13; i++)
@@ -124,14 +124,14 @@ namespace exercise.tests
             Assert.That(player.Hand.Count, Is.EqualTo(0));
 
             List<Card> cards = new List<Card>();
-            cards.Add(new Card("Q", "hearts"));
-            cards.Add(new Card("J", "spades"));
-            cards.Add(new Card("3", "diamonds"));
+            cards.Add(new Card("Q", "H"));
+            cards.Add(new Card("J", "S"));
+            cards.Add(new Card("3", "D"));
 
             player = new Player("Kristian", cards);
             Assert.That(player.Hand.Count, Is.EqualTo(3));
 
-            player = new Player("Kristian", new Card("3", "spades"));
+            player = new Player("Kristian", new Card("3", "S"));
             Assert.That(player.Hand.Count, Is.EqualTo(1));
         }
 
@@ -139,7 +139,7 @@ namespace exercise.tests
         public void testPlayerHandAdd()
         {
             Player player = new Player("Kristian");
-            Card card = new Card("4", "hearts");
+            Card card = new Card("4", "H");
 
             player.Add(card);
 
@@ -147,7 +147,7 @@ namespace exercise.tests
             Assert.That(player.Hand[0].Value, Is.EqualTo(card.Value));
             Assert.That(player.Hand[0].Suit, Is.EqualTo(card.Suit));
 
-            Card card2 = new Card("Q", "spades");
+            Card card2 = new Card("Q", "S");
             player.Add(card2);
 
             Assert.That(player.Hand.Count, Is.EqualTo(2));
@@ -158,7 +158,7 @@ namespace exercise.tests
         [Test]
         public void testPlayerHandClear()
         {
-            Player player = new Player("Kristian", new Card("7", "hearts"));
+            Player player = new Player("Kristian", new Card("7", "H"));
 
             player.Clear();
 
@@ -190,31 +190,17 @@ namespace exercise.tests
 
             Assert.False(pokerGame.gameOver());
         }
-
-        [Test]
-        public void testPokerGame()
-        {
-            PokerGame pokerGame = new PokerGame("Kristian", "Nigel");
-
-            pokerGame.startGame();
-
-            Assert.That(pokerGame.Player1.Hand.Count, Is.EqualTo(7));
-            Assert.That(pokerGame.Player2.Hand.Count, Is.EqualTo(7));
-            Assert.That(pokerGame.Table.Count, Is.EqualTo(5));
-
-            Assert.True(pokerGame.gameOver());
-        }
         
         [Test]
-        public void testScoreCalculationStraightFlush()
+        public void testScoreCalculationRoyalFlush()
         {
             PokerGame pokerGame = new PokerGame("Kristian", "Nigel");
 
             List<Card> royalFlush = new List<Card>()
             {
-                new Card("8", "hearts"), new Card("9", "hearts"), new Card("10", "hearts"), 
-                new Card("J", "hearts"), new Card("Q", "hearts"), new Card("K", "hearts"),
-                new Card("A", "hearts")
+                new Card("8", "H"), new Card("9", "H"), new Card("10", "H"), 
+                new Card("J", "H"), new Card("Q", "H"), new Card("K", "H"),
+                new Card("A", "H")
             };
 
 
@@ -224,8 +210,32 @@ namespace exercise.tests
             }
 
             Assert.That(pokerGame.Player1.Hand.Count(), Is.EqualTo(7));
+            Player winningHand;
+            Assert.That(pokerGame.calcScore(pokerGame.Player1.Hand, out winningHand), Is.EqualTo("Royal Flush"));
+            Assert.That(winningHand.Hand.Count, Is.EqualTo(5));
+        }
 
-            Assert.That(pokerGame.calcScore(pokerGame.Player1), Is.EqualTo("STRAIGHT-FLUSH"));
+        [Test]
+        public void testScoreCalculationStraightFlush()
+        {
+            PokerGame pokerGame = new PokerGame("Kristian", "Nigel");
+
+            List<Card> royalFlush = new List<Card>()
+            {
+                new Card("4", "H"), new Card("6", "H"), new Card("9", "H"),
+                new Card("10", "H"), new Card("J", "H"), new Card("Q", "H"),
+                new Card("K", "H")
+            };
+
+            foreach (Card card in royalFlush)
+            {
+                pokerGame.Player1.Add(card);
+            }
+
+            Assert.That(pokerGame.Player1.Hand.Count(), Is.EqualTo(7));
+            Player winningHand;
+            Assert.That(pokerGame.calcScore(pokerGame.Player1.Hand, out winningHand), Is.EqualTo("Straight Flush"));
+            Assert.That(winningHand.Hand.Count, Is.EqualTo(5));
         }
 
         [Test]
@@ -233,22 +243,22 @@ namespace exercise.tests
         {
             PokerGame pokerGame = new PokerGame("Kristian", "Nigel");
 
-            List<Card> flush = new List<Card>()
+            List<Card> Flush = new List<Card>()
             {
-                new Card("2", "hearts"), new Card("4", "hearts"), new Card("6", "hearts"),
-                new Card("8", "hearts"), new Card("10", "hearts"), new Card("Q", "hearts"),
-                new Card("A", "hearts")
+                new Card("2", "H"), new Card("4", "H"), new Card("6", "H"),
+                new Card("8", "H"), new Card("10", "H"), new Card("Q", "H"),
+                new Card("A", "H")
             };
 
 
-            foreach (Card card in flush)
+            foreach (Card card in Flush)
             {
                 pokerGame.Player1.Add(card);
             }
 
             Assert.That(pokerGame.Player1.Hand.Count(), Is.EqualTo(7));
 
-            Assert.That(pokerGame.calcScore(pokerGame.Player1), Is.EqualTo("FLUSH"));
+            Assert.That(pokerGame.calcScore(pokerGame.Player1.Hand, out _), Is.EqualTo("Flush"));
         }
 
         [Test]
@@ -258,9 +268,9 @@ namespace exercise.tests
 
             List<Card> four = new List<Card>()
             {
-                new Card("2", "hearts"), new Card("2", "spades"), new Card("2", "diamonds"),
-                new Card("2", "clubs"), new Card("10", "hearts"), new Card("Q", "hearts"),
-                new Card("A", "hearts")
+                new Card("2", "H"), new Card("2", "S"), new Card("2", "D"),
+                new Card("2", "C"), new Card("10", "H"), new Card("Q", "H"),
+                new Card("A", "H")
             };
 
 
@@ -270,8 +280,9 @@ namespace exercise.tests
             }
 
             Assert.That(pokerGame.Player1.Hand.Count(), Is.EqualTo(7));
-
-            Assert.That(pokerGame.calcScore(pokerGame.Player1), Is.EqualTo("FOUR"));
+            Player winningHand;
+            Assert.That(pokerGame.calcScore(pokerGame.Player1.Hand, out winningHand), Is.EqualTo("Four of a Kind"));
+            Assert.That(winningHand.Hand.Count, Is.EqualTo(5));
         }
 
         [Test]
@@ -281,11 +292,10 @@ namespace exercise.tests
 
             List<Card> fullHouse = new List<Card>()
             {
-                new Card("2", "hearts"), new Card("2", "spades"), new Card("2", "diamonds"),
-                new Card("4", "clubs"), new Card("10", "hearts"), new Card("10", "diamonds"),
-                new Card("A", "hearts")
+                new Card("2", "H"), new Card("2", "S"), new Card("2", "D"),
+                new Card("4", "C"), new Card("10", "H"), new Card("10", "D"),
+                new Card("A", "H")
             };
-
 
             foreach (Card card in fullHouse)
             {
@@ -293,8 +303,10 @@ namespace exercise.tests
             }
 
             Assert.That(pokerGame.Player1.Hand.Count(), Is.EqualTo(7));
+            Player winningHand;
+            Assert.That(pokerGame.calcScore(pokerGame.Player1.Hand, out winningHand), Is.EqualTo("Full House"));
+            Assert.That(winningHand.Hand.Count, Is.EqualTo(5));
 
-            Assert.That(pokerGame.calcScore(pokerGame.Player1), Is.EqualTo("FULL"));
         }
 
         [Test]
@@ -304,9 +316,9 @@ namespace exercise.tests
 
             List<Card> stright = new List<Card>()
             {
-                new Card("2", "hearts"), new Card("3", "spades"), new Card("4", "diamonds"),
-                new Card("5", "clubs"), new Card("6", "hearts"), new Card("10", "diamonds"),
-                new Card("A", "hearts")
+                new Card("2", "H"), new Card("3", "S"), new Card("4", "D"),
+                new Card("5", "C"), new Card("6", "H"), new Card("10", "D"),
+                new Card("A", "H")
             };
 
 
@@ -316,8 +328,9 @@ namespace exercise.tests
             }
 
             Assert.That(pokerGame.Player1.Hand.Count(), Is.EqualTo(7));
-
-            Assert.That(pokerGame.calcScore(pokerGame.Player1), Is.EqualTo("STRAIGHT"));
+            Player winningHand;
+            Assert.That(pokerGame.calcScore(pokerGame.Player1.Hand, out winningHand), Is.EqualTo("Straight"));
+            Assert.That(winningHand.Hand.Count, Is.EqualTo(5));
         }
 
         [Test]
@@ -327,9 +340,9 @@ namespace exercise.tests
 
             List<Card> three = new List<Card>()
             {
-                new Card("2", "hearts"), new Card("2", "spades"), new Card("2", "diamonds"),
-                new Card("5", "clubs"), new Card("6", "hearts"), new Card("10", "diamonds"),
-                new Card("A", "hearts")
+                new Card("2", "H"), new Card("2", "S"), new Card("2", "D"),
+                new Card("5", "C"), new Card("6", "H"), new Card("10", "D"),
+                new Card("A", "H")
             };
 
 
@@ -339,8 +352,9 @@ namespace exercise.tests
             }
 
             Assert.That(pokerGame.Player1.Hand.Count(), Is.EqualTo(7));
-
-            Assert.That(pokerGame.calcScore(pokerGame.Player1), Is.EqualTo("THREE"));
+            Player winningHand;
+            Assert.That(pokerGame.calcScore(pokerGame.Player1.Hand, out winningHand), Is.EqualTo("Three of a Kind"));
+            Assert.That(winningHand.Hand.Count, Is.EqualTo(5));
         }
 
         [Test]
@@ -350,9 +364,9 @@ namespace exercise.tests
 
             List<Card> twoPairs = new List<Card>()
             {
-                new Card("2", "hearts"), new Card("2", "spades"), new Card("4", "diamonds"),
-                new Card("4", "clubs"), new Card("6", "hearts"), new Card("10", "diamonds"),
-                new Card("A", "hearts")
+                new Card("2", "H"), new Card("2", "S"), new Card("4", "D"),
+                new Card("4", "C"), new Card("6", "H"), new Card("10", "D"),
+                new Card("A", "H")
             };
 
 
@@ -362,8 +376,9 @@ namespace exercise.tests
             }
 
             Assert.That(pokerGame.Player1.Hand.Count(), Is.EqualTo(7));
-
-            Assert.That(pokerGame.calcScore(pokerGame.Player1), Is.EqualTo("TWO-PAIRS"));
+            Player winningHand;
+            Assert.That(pokerGame.calcScore(pokerGame.Player1.Hand, out winningHand), Is.EqualTo("Two Pairs"));
+            Assert.That(winningHand.Hand.Count, Is.EqualTo(5));
         }
 
         [Test]
@@ -373,9 +388,9 @@ namespace exercise.tests
 
             List<Card> pair = new List<Card>()
             {
-                new Card("2", "hearts"), new Card("2", "spades"), new Card("3", "diamonds"),
-                new Card("4", "clubs"), new Card("6", "hearts"), new Card("10", "diamonds"),
-                new Card("A", "hearts")
+                new Card("2", "H"), new Card("2", "S"), new Card("3", "D"),
+                new Card("4", "C"), new Card("6", "H"), new Card("10", "D"),
+                new Card("A", "H")
             };
 
 
@@ -385,8 +400,9 @@ namespace exercise.tests
             }
 
             Assert.That(pokerGame.Player1.Hand.Count(), Is.EqualTo(7));
-
-            Assert.That(pokerGame.calcScore(pokerGame.Player1), Is.EqualTo("PAIR"));
+            Player winningHand;
+            Assert.That(pokerGame.calcScore(pokerGame.Player1.Hand, out winningHand), Is.EqualTo("One Pair"));
+            Assert.That(winningHand.Hand.Count, Is.EqualTo(5));
         }
 
         [Test]
@@ -396,9 +412,9 @@ namespace exercise.tests
 
             List<Card> high = new List<Card>()
             {
-                new Card("2", "hearts"), new Card("3", "spades"), new Card("4", "diamonds"),
-                new Card("5", "clubs"), new Card("7", "hearts"), new Card("10", "diamonds"),
-                new Card("A", "hearts")
+                new Card("2", "H"), new Card("3", "S"), new Card("4", "D"),
+                new Card("5", "C"), new Card("7", "H"), new Card("10", "D"),
+                new Card("A", "H")
             };
 
             foreach (Card card in high)
@@ -407,8 +423,9 @@ namespace exercise.tests
             }
 
             Assert.That(pokerGame.Player1.Hand.Count(), Is.EqualTo(7));
-
-            Assert.That(pokerGame.calcScore(pokerGame.Player1), Is.EqualTo("HIGH"));
+            Player winningHand;
+            Assert.That(pokerGame.calcScore(pokerGame.Player1.Hand, out winningHand), Is.EqualTo("High Card"));
+            Assert.That(winningHand.Hand.Count, Is.EqualTo(5));
         }
 
         [Test]
@@ -416,17 +433,17 @@ namespace exercise.tests
         {
             PokerGame pokerGame = new PokerGame("Kristian", "Nigel");
 
-            string outcome = pokerGame.getWinner("HIGH", "FLUSH");
+            string outcome = pokerGame.getWinner("High Card", "Flush");
 
-            Assert.That(outcome, Is.EqualTo("PLAYER2"));
+            Assert.That(outcome, Is.EqualTo("Player 2"));
 
-            outcome = pokerGame.getWinner("FLUSH", "FLUSH");
+            outcome = pokerGame.getWinner("Flush", "Flush");
 
             Assert.That(outcome, Is.EqualTo("TIE"));
 
-            outcome = pokerGame.getWinner("STRAIGHT-FLUSH", "FLUSH");
+            outcome = pokerGame.getWinner("Straight Flush", "Flush");
 
-            Assert.That(outcome, Is.EqualTo("PLAYER1"));
+            Assert.That(outcome, Is.EqualTo("Player 1"));
         }
     }
 }

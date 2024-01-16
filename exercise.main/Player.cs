@@ -44,24 +44,6 @@ namespace exercise.main
             _hand.Insert(counter, card);
         }
 
-        public string printHand()
-        {
-            string hand = "";
-
-            foreach (Card card in _hand)
-            {
-                string suit = "";
-                if (card.Suit == "hearts") { suit = "H"; }
-                else if (card.Suit == "spades") { suit = "S"; }
-                else if (card.Suit == "diamonds") { suit = "D"; }
-                else if (card.Suit == "clubs") { suit = "C"; }
-                hand += card.Value.ToString() + "-" + suit + ", ";
-            }
-
-            hand = hand.Trim();
-            return hand.Trim(',');
-        }
-
         public void Clear()
         {
             _hand = new List<Card>();

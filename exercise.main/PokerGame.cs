@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,7 +40,7 @@ namespace exercise.main
             }
         }
 
-        public void dealToTable()
+        public int dealToTable()
         {
             Card card = _deck.Deal();
             int counter = 0;
@@ -50,6 +52,7 @@ namespace exercise.main
                 }
             }
             _table.Insert(counter, card);
+            return counter;
         }
 
         public void initGame()
@@ -66,6 +69,7 @@ namespace exercise.main
         public bool isFlush(List<Card> cards, out Dictionary<string, int> suitCount)
         {
             suitCount = new Dictionary<string, int>();
+
             foreach (Card card in cards)
             {
                 if (suitCount.TryGetValue(card.Suit, out int _))
@@ -80,7 +84,9 @@ namespace exercise.main
 
             foreach (int count in suitCount.Values)
             {
-                if (count >= 5) return true;
+                if (count >= 5) {
+                    return true;
+                }
             }
 
             return false;
@@ -213,97 +219,224 @@ namespace exercise.main
             return nrPairs;
         }
 
-        public string calcScore(Player player)
+        public Player getWinningCardsSuits(Dictionary<string, int> suitCount, List<Card> hand, int nrSuits)
+        {
+            Player winning = new Player("winning");
+            foreach ((string suit, int count) in suitCount)
+            {
+                if (count >= nrSuits)
+                {
+                    foreach (Card card in hand.Where(c => c.Suit == suit))
+                    {
+                        winning.Add(card);
+                    }
+                }
+            }
+            while (winning.Hand.Count > 5)
+            {
+                winning.Hand.RemoveAt(0);
+            }
+            return winning;
+        }
+
+        public Player getWinningCardsCount(Dictionary<int, int> cardCount, List<Card> hand, int nrCards)
+        {
+            Player winning = new Player("winning");
+            foreach ((int cardValue, int count) in cardCount)
+            {
+                if (count == nrCards)
+                {
+                    foreach (Card card in hand.Where(c => c.ValueInt == cardValue))
+                    {
+                        winning.Add(card);
+                    }
+                }
+            }
+            for (int i = hand.Count - 1; i >= 0; i--)
+            {
+                if (cardCount[hand[i].ValueInt] != nrCards)
+                {
+                    winning.Add(hand[i]);
+                }
+                if (winning.Hand.Count == 5)
+                {
+                    break;
+                }
+            }
+            return winning;
+        }
+
+        public string calcScore(List<Card> hand, out Player winner)
         {
             foreach (Card card in Table)
             {
-                player.Hand.Add(card);
+                hand.Add(card);
             }
+
             Dictionary<string, int> suitCount;
 
-            bool flush = isFlush(player.Hand, out suitCount);
+            bool flush = isFlush(hand, out suitCount);
             if (flush)
             {
-                if (isStraightFlush(player.Hand, suitCount))
+                if (isStraightFlush(hand, suitCount))
                 {
-                    return "STRAIGHT-FLUSH";
+                    winner = getWinningCardsSuits(suitCount, hand, 5);
+
+                    if (winner.Hand[winner.Hand.Count - 1].Value == "A")
+                    {
+                        return "Royal Flush";
+                    }
+                    return "Straight Flush";
                 }
             }
 
             //Check four of a kind
             Dictionary<int, int> cardCount;
-            if (fourOfAKind(player.Hand, out cardCount))
+            if (fourOfAKind(hand, out cardCount))
             {
-                return "FOUR";
+                winner = getWinningCardsCount(cardCount, hand, 4);
+
+                return "Four of a Kind";
             }
 
             //Check full house
-            if (fullHouse(player.Hand, cardCount))
+            if (fullHouse(hand, cardCount))
             {
-                return "FULL";
+                winner = getWinningCardsCount(cardCount, hand, 3);
+                Player winning2 = getWinningCardsCount(cardCount, hand, 2);
+
+                foreach (Card card in winning2.Hand)
+                {
+                    winner.Add(card);
+                }
+
+                while (winner.Hand.Count > 5)
+                {
+                    winner.Hand.RemoveAt(0);
+                }
+                return "Full House";
             }
 
             //If it was flush but not straight
             if (flush)
             {
-                return "FLUSH";
+                winner = getWinningCardsSuits(suitCount, hand, 5);
+
+                return "Flush";
             }
 
             //Check straight
-            if (straight(player.Hand))
+            if (straight(hand))
             {
-                return "STRAIGHT";
+                winner = new Player("winner");
+
+                for (int i = hand.Count - 1; i >= 0; i--) {
+                    if (i > 0 && hand[i].ValueInt == hand[i-1].ValueInt+1)
+                    {
+                        winner.Add(hand[i]);
+                    }
+                    if (winner.Hand.Count == 5)
+                    {
+                        break;
+                    }
+                }
+                if (winner.Hand.Count == 4)
+                {
+                    winner.Hand.Add(hand[0]);
+                }
+                return "Straight";
             }
 
             //Check three of a kind
-            if (threeOfAKind(player.Hand, cardCount))
+            if (threeOfAKind(hand, cardCount))
             {
-                return "THREE";
+                winner = getWinningCardsCount(cardCount, hand, 3);
+
+                return "Three of a Kind";
             }
 
             //Check two pairs
-            int pairs = nrPairs(player.Hand, cardCount);
-            if (pairs == 2)
+            int pairs = nrPairs(hand, cardCount);
+            if (pairs == 2 || pairs ==1)
             {
-                return "TWO-PAIRS";
-            }
-            else if (pairs == 1)
-            {
-                return "PAIR";
+                winner = getWinningCardsCount(cardCount, hand, 2);
+
+                if (pairs == 2)
+                {
+                    return "Two Pairs";
+                }
+                return "One Pair";
             }
             else
             {
-                return "HIGH";
+                winner = new Player("winner");
+                for (int i = hand.Count - 1; i >= 0; i--)
+                {
+                    winner.Add(hand[i]);
+                    if (winner.Hand.Count == 5)
+                    {
+                        break;
+                    }
+                }
+                return "High Card";
             }
         }
-
 
         public string getWinner(string scorePlayer1, string scorePlayer2)
         {
             if (scorePlayer1 == scorePlayer2) { return "TIE"; }
 
             Dictionary<string, int> scores = new Dictionary<string, int>() {
-                {"HIGH", 1}, {"PAIR", 2}, {"TWO-PAIRS", 3}, {"THREE", 4}, {"STRAIGHT", 5}, {"FLUSH", 6}, 
-                {"FULL", 7}, {"FOUR", 8}, {"STRAIGHT-FLUSH", 9}
+                {"High Card", 1}, {"One Pair", 2}, {"Two Pairs", 3}, {"Three of a Kind", 4}, {"Straight", 5}, {"Flush", 6}, 
+                {"Full House", 7}, {"Four of a Kind", 8}, {"Straight Flush", 9}
             };
 
-            if (scores[scorePlayer1] > scores[scorePlayer2]) { return "PLAYER1"; }
+            if (scores[scorePlayer1] > scores[scorePlayer2]) { return "Player 1"; }
 
-            return "PLAYER2";
+            return "Player 2";
         }
 
-        public string printTable()
+        public Dictionary<int, int> getCardCount(List<Card> hand)
+        {
+            Dictionary<int, int> cardCountsP1 = new Dictionary<int, int>();
+            foreach (Card card in hand)
+            {
+                if (cardCountsP1.ContainsKey(card.ValueInt))
+                {
+                    cardCountsP1[card.ValueInt] += 1;
+                }
+                else
+                {
+                    cardCountsP1.Add(card.ValueInt, 1);
+                }
+            }
+            return cardCountsP1;
+        }
+
+        public string highCard(List<Card> hand1, List<Card> hand2)
+        {
+            for (int i = hand1.Count - 1; i >= 0; i--)
+            {
+                if (hand1[i].ValueInt != hand2[i].ValueInt)
+                {
+                    return hand1[i].ValueInt > hand2[i].ValueInt ? "Player 1" : "Player 2";
+                }
+            }
+            return "Tie";
+        }
+
+        public string tieBreaker(string score, Player player1, Player player2)
+        {
+            return highCard(player1.Hand, player2.Hand);
+        }
+
+        public string printCards(List<Card> cards)
         {
             string table  = "";
 
-            foreach (Card card in Table)
+            foreach (Card card in cards)
             {
-                string suit = "";
-                if (card.Suit == "hearts") { suit = "H"; }
-                else if (card.Suit == "spades") { suit = "S"; }
-                else if (card.Suit == "diamonds") { suit = "D"; }
-                else if (card.Suit == "clubs") { suit = "C"; }
-                table += card.Value.ToString() + "-" + suit + ", ";
+                table += card.Value + "-" + card.Suit + ", ";
             }
 
             table = table.Trim();
@@ -313,43 +446,63 @@ namespace exercise.main
         public void startGame()
         {
             initGame();
-            Console.WriteLine($"{Player1.Name}'s hand: {Player1.printHand()}");
-            Console.WriteLine($"{Player2.Name}'s hand: {Player2.printHand()}");
-            Console.WriteLine($"Cards on the table: {printTable()}");
+            Console.Clear();
+            Console.WriteLine($"{Player1.Name}'s hand: {printCards(Player1.Hand)}");
+            Console.WriteLine($"{Player2.Name}'s hand: {printCards(Player2.Hand)}");
+            Console.WriteLine($"Cards on the table: {printCards(Table)}");
             Console.WriteLine();
 
             while (!gameOver())
             {
-                dealToTable();
-                Console.WriteLine($"New card added to table: {Table[Table.Count - 1].printCard()}");
-                Console.WriteLine($"Current cards on the table: {printTable()}");
+                Console.WriteLine("Press any button to continue");
+                Console.ReadLine();
+                Console.Clear();
+                int index = dealToTable();
+                Console.WriteLine($"New card added to table: {Table[index].Value}-{Table[index].Suit}");
+                Console.WriteLine($"Current cards on the table: {printCards(Table)}");
                 Console.WriteLine();
             }
+            Console.Clear();
 
-            string player1Score = calcScore(Player1);
-            string player2Score = calcScore(Player2);
+            Player player1Hand;
+            Player player2Hand;
+            string player1Score = calcScore(Player1.Hand, out player1Hand);
+            string player2Score = calcScore(Player2.Hand, out player2Hand);
 
             string outcome = getWinner(player1Score, player2Score);
             string winner = "";
-            if (outcome == "PLAYER1")
+
+            if (outcome == "Tie")
+            {
+                outcome = tieBreaker(player1Score, player1Hand, player2Hand);
+            }
+            if (outcome == "Player 1")
             {
                 winner = Player1.Name;
-            } 
-            else if (outcome == "PLAYER2")
+            }
+            else if (outcome == "Player 2")
             {
                 winner = Player2.Name;
             }
-            else
-            {
-                winner = "nobody";
-            }
 
             Console.WriteLine($"The winner of the game is {outcome}: {winner}");
+            Console.WriteLine();
+            if (winner == Player1.Name)
+            {
+                Console.WriteLine($"Won with {player1Score}: {printCards(player1Hand.Hand)}");
+                Console.WriteLine($"Lost with {player2Score}: {printCards(player2Hand.Hand)}");
+            }
+            else if (winner == Player2.Name)
+            {
+                Console.WriteLine($"Won with hand {player2Score}: {printCards(player2Hand.Hand)}");
+                Console.WriteLine($"With with hand {player1Score}: {printCards(player1Hand.Hand)}");
+            }
+            else
+            {
+                Console.WriteLine($"{Player1.Name} had {player2Score}: {printCards(player2Hand.Hand)}");
+                Console.WriteLine($"{Player2.Name} had {player1Score}: {printCards(player1Hand.Hand)}");
+            }
 
-            // Add royal flush
-            // Print best hand (both if tie)
-            // Add tie breaker
-            // Add ability to play again and advance to next round
             // Add betting/calling/folding
         }
 

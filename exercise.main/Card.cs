@@ -29,19 +29,5 @@ namespace exercise.main
         public string Value { get => _value; }
         public int ValueInt { get => _valueInt; }
         public string Suit { get => _suit; }
-
-        public string printCard()
-        {
-            string card = "";
-            string suit = "";
-            if (Suit == "hearts") { suit = "H"; }
-            else if (Suit == "spades") { suit = "S"; }
-            else if (Suit == "diamonds") { suit = "D"; }
-            else if (Suit == "clubs") { suit = "C"; }
-            card += Value.ToString() + "-" + suit + ", ";
-
-            card = card.Trim();
-            return card.Trim(',');
-        }
     }
 }
