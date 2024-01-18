@@ -14,6 +14,7 @@ namespace exercise.main
         private Player _player2;
         private List<Card> _table;
         private Deck _deck;
+        private int _betAmount;
 
         public PokerGame(string player1, string player2)
         {
@@ -26,6 +27,7 @@ namespace exercise.main
         public Player Player1 { get { return _player1; } }
         public Player Player2 { get { return _player2; } }
         public List<Card> Table { get { return _table; } }
+        public int BetAmount {  get => _betAmount; set => _betAmount = value; }
 
         public bool gameOver()
         {
@@ -57,8 +59,14 @@ namespace exercise.main
 
         public void initGame()
         {
-            addToHand(_player1);
-            addToHand(_player2);
+            Player1.Clear();
+            Player2.Clear();
+            Table.Clear();
+            _deck.Shuffle();
+            BetAmount = -1;
+
+            addToHand(Player1);
+            addToHand(Player2);
 
             for (int i = 0; i < 3; i++)
             {
@@ -154,10 +162,7 @@ namespace exercise.main
         {
             foreach (int count in cardCount.Values)
             {
-                if (count == 3)
-                {
-                    return true;
-                }
+                if (count == 3) { return true; }
             }
             return false;
         }
@@ -167,10 +172,7 @@ namespace exercise.main
             if (threeOfAKind(cards, cardCount)) {
                 foreach (int count in cardCount.Values)
                 {
-                    if (count == 2)
-                    {
-                        return true;
-                    }
+                    if (count == 2) { return true; }
                 }
             }
 
@@ -212,9 +214,7 @@ namespace exercise.main
             int nrPairs = 0;
             foreach (int count in cardCount.Values)
             {
-                if (count == 2) {
-                    nrPairs++;
-                }
+                if (count == 2) { nrPairs++; }
             }
             return nrPairs;
         }
@@ -282,11 +282,7 @@ namespace exercise.main
                 {
                     winner = getWinningCardsSuits(suitCount, hand, 5);
 
-                    if (winner.Hand[winner.Hand.Count - 1].Value == "A")
-                    {
-                        return "Royal Flush";
-                    }
-                    return "Straight Flush";
+                    return (winner.Hand[winner.Hand.Count - 1].Value == "A") ? "Royal Flush" : "Straight Flush";
                 }
             }
 
@@ -361,11 +357,7 @@ namespace exercise.main
             {
                 winner = getWinningCardsCount(cardCount, hand, 2);
 
-                if (pairs == 2)
-                {
-                    return "Two Pairs";
-                }
-                return "One Pair";
+                return (pairs == 2) ? "Two Pairs" : "One Pair";
             }
             else
             {
@@ -391,9 +383,7 @@ namespace exercise.main
                 {"Full House", 7}, {"Four of a Kind", 8}, {"Straight Flush", 9}
             };
 
-            if (scores[scorePlayer1] > scores[scorePlayer2]) { return "Player 1"; }
-
-            return "Player 2";
+            return (scores[scorePlayer1] > scores[scorePlayer2]) ? "Player 1" : "Player 2";
         }
 
         public Dictionary<int, int> getCardCount(List<Card> hand)
@@ -432,38 +422,19 @@ namespace exercise.main
 
         public string printCards(List<Card> cards)
         {
-            string table  = "";
+            string cardString  = "";
 
             foreach (Card card in cards)
             {
-                table += card.Value + "-" + card.Suit + ", ";
+                cardString += card.Value + "-" + card.Suit + ", ";
             }
 
-            table = table.Trim();
-            return table.Trim(',');
+            cardString = cardString.Trim();
+            return cardString.Trim(',');
         }
 
-        public void startGame()
+        public void printWinner()
         {
-            initGame();
-            Console.Clear();
-            Console.WriteLine($"{Player1.Name}'s hand: {printCards(Player1.Hand)}");
-            Console.WriteLine($"{Player2.Name}'s hand: {printCards(Player2.Hand)}");
-            Console.WriteLine($"Cards on the table: {printCards(Table)}");
-            Console.WriteLine();
-
-            while (!gameOver())
-            {
-                Console.WriteLine("Press any button to continue");
-                Console.ReadLine();
-                Console.Clear();
-                int index = dealToTable();
-                Console.WriteLine($"New card added to table: {Table[index].Value}-{Table[index].Suit}");
-                Console.WriteLine($"Current cards on the table: {printCards(Table)}");
-                Console.WriteLine();
-            }
-            Console.Clear();
-
             Player player1Hand;
             Player player2Hand;
             string player1Score = calcScore(Player1.Hand, out player1Hand);
@@ -476,6 +447,7 @@ namespace exercise.main
             {
                 outcome = tieBreaker(player1Score, player1Hand, player2Hand);
             }
+
             if (outcome == "Player 1")
             {
                 winner = Player1.Name;
@@ -485,25 +457,136 @@ namespace exercise.main
                 winner = Player2.Name;
             }
 
-            Console.WriteLine($"The winner of the game is {outcome}: {winner}");
-            Console.WriteLine();
-            if (winner == Player1.Name)
+            if (Player1.Folded)
             {
-                Console.WriteLine($"Won with {player1Score}: {printCards(player1Hand.Hand)}");
-                Console.WriteLine($"Lost with {player2Score}: {printCards(player2Hand.Hand)}");
+                Console.WriteLine($"The winner of the game is {Player2.Name}: {Player1.Name} folded");
+                Console.WriteLine();
+                Console.WriteLine($"{Player2.Name} had {player2Score} with: {printCards(player2Hand.Hand)}");
+                Console.WriteLine($"{Player1.Name}'s had {player1Score} with: {printCards(player1Hand.Hand)}");
+                Player1.Folded = false;
             }
-            else if (winner == Player2.Name)
+            else if (Player2.Folded)
             {
-                Console.WriteLine($"Won with hand {player2Score}: {printCards(player2Hand.Hand)}");
-                Console.WriteLine($"With with hand {player1Score}: {printCards(player1Hand.Hand)}");
+                Console.WriteLine($"The winner of the game is {Player1.Name}: {Player2.Name} folded");
+                Console.WriteLine();
+                Console.WriteLine($"{Player2.Name} had {player2Score} with: {printCards(player2Hand.Hand)}");
+                Console.WriteLine($"{Player1.Name} had {player1Score} with: {printCards(player1Hand.Hand)}");
+                Player2.Folded = false;
             }
             else
             {
-                Console.WriteLine($"{Player1.Name} had {player2Score}: {printCards(player2Hand.Hand)}");
-                Console.WriteLine($"{Player2.Name} had {player1Score}: {printCards(player1Hand.Hand)}");
-            }
 
-            // Add betting/calling/folding
+                Console.WriteLine($"The winner of the game is {outcome}: {winner}");
+                Console.WriteLine();
+                if (winner == Player1.Name)
+                {
+                    Console.WriteLine($"Won with {player1Score}: {printCards(player1Hand.Hand)}");
+                    Console.WriteLine($"Lost with {player2Score}: {printCards(player2Hand.Hand)}");
+                    Player1.Money += BetAmount;
+                    Player2.Money -= BetAmount;
+                    Console.WriteLine();
+                    Console.WriteLine($"{winner} won £{BetAmount}. New total is £{Player1.Money}");
+                    Console.WriteLine($"{Player2.Name} lost £{BetAmount}. New total is £{Player2.Money}");
+                }
+                else if (winner == Player2.Name)
+                {
+                    Console.WriteLine($"Won with hand {player2Score}: {printCards(player2Hand.Hand)}");
+                    Console.WriteLine($"With with hand {player1Score}: {printCards(player1Hand.Hand)}");
+                    Player1.Money -= BetAmount;
+                    Player2.Money += BetAmount;
+                    Console.WriteLine();
+                    Console.WriteLine($"{winner} won £{BetAmount}. New total is £{Player2.Money}");
+                    Console.WriteLine($"{Player1.Name} lost £{BetAmount}. New total is £{Player1.Money}");
+                }
+                else
+                {
+                    Console.WriteLine($"{Player1.Name} had {player2Score}: {printCards(player2Hand.Hand)}");
+                    Console.WriteLine($"{Player2.Name} had {player1Score}: {printCards(player1Hand.Hand)}");
+                }
+            }
+        }
+
+        public void bettingRound()
+        {
+            List<Player> players = new List<Player>() { Player1, Player2 };
+            bool bettingOver = false;
+            Player player = players.First();
+
+            while(!bettingOver) {
+                bool success = false;
+                int playerBet = 0;
+                Console.WriteLine($"{player.Name} has £{player.Money}");
+
+                while (!success) 
+                {
+                    Console.WriteLine($"Enter bet amount for {player.Name}: ");
+                    success = int.TryParse(Console.ReadLine(), out playerBet);
+                    if(!success)
+                    {
+                        Console.WriteLine("Invalid bet value");
+                    }
+                    if (success)
+                    {
+                        if (playerBet < BetAmount)
+                        {
+                            Console.WriteLine($"Bet is too low, please bet at least £{BetAmount}");
+                            success = false;
+                            Console.WriteLine();
+                        } 
+                        else if (playerBet > player.Money)
+                        {
+                            Console.WriteLine($"{player.Name} does not have enough money!");
+                            Console.WriteLine();
+                            if (playerBet > player.Money && BetAmount > player.Money)
+                            {
+                                Console.WriteLine($"{player.Name} has folded this round");
+                                BetAmount = 0;
+                                player.Folded = true;
+                                bettingOver = true;
+                            }
+                        }
+                        else if (playerBet > BetAmount) 
+                        {
+                            Console.WriteLine($"Minimum bet changed to £{playerBet}");
+                            BetAmount = playerBet;
+                            Console.WriteLine();
+                            player = players.Where(p => p.Name != player.Name).First();
+                        }
+                        else if (playerBet == BetAmount)
+                        {
+                            Console.WriteLine();
+                            bettingOver = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void startGame()
+        {
+            initGame();
+            Console.Clear();
+            Console.WriteLine($"{Player1.Name}'s hand: {printCards(Player1.Hand)}");
+            Console.WriteLine($"{Player2.Name}'s hand: {printCards(Player2.Hand)}");
+            Console.WriteLine($"Cards on the table: {printCards(Table)}");
+            Console.WriteLine();
+            bettingRound();
+
+            while (!gameOver())
+            {
+                Console.WriteLine("Press any button to continue");
+                Console.ReadLine();
+                Console.Clear();
+                int index = dealToTable();
+                Console.WriteLine($"New card added to table: {Table[index].Value}-{Table[index].Suit}");
+                Console.WriteLine($"Current cards on the table: {printCards(Table)}");
+                Console.WriteLine();
+            }
+            Console.WriteLine("Press any button to continue");
+            Console.ReadLine();
+            Console.Clear();
+
+            printWinner();
         }
 
     }

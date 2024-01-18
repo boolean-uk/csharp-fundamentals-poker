@@ -445,5 +445,21 @@ namespace exercise.tests
 
             Assert.That(outcome, Is.EqualTo("Player 1"));
         }
+
+        [Test]
+        public void testMoney()
+        {
+            Player player = new Player("Kristian");
+
+            Assert.That(player.Money, Is.EqualTo(1000));
+        }
+
+        [Test]
+        public void testBettingRound()
+        {
+            PokerGame game = new PokerGame("Kristian", "Nigel");
+
+            game.bettingRound();
+        }
     }
 }

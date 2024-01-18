@@ -50,10 +50,7 @@ namespace exercise.main
 
         public Card Deal()
         {
-            if (_cards.Count == 0)
-            {
-                throw new Exception("Deck is empty");
-            }
+            if (_cards.Count == 0) { throw new Exception("Deck is empty"); }
 
             Card card = _cards[_cards.Count-1];
             _cards.RemoveAt(_cards.Count-1);

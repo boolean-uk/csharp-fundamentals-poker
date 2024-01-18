@@ -10,10 +10,14 @@ namespace exercise.main
     {
         private string _name;
         private List<Card> _hand;
+        private int _money;
+        private bool _folded;
         public Player(string name)
         {
             _name = name;
             _hand = new List<Card>();
+            _money = 1000;
+            _folded = false;
         }
 
         public Player(string name, Card card)
@@ -30,6 +34,8 @@ namespace exercise.main
 
         public string Name { get { return _name; } }
         public List<Card> Hand { get {  return _hand; } }
+        public int Money { get { return _money; } set { _money = value; } }
+        public bool Folded {  get { return _folded; } set { _folded = value; } }
 
         public void Add(Card card)
         {
