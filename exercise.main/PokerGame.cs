@@ -412,10 +412,17 @@ namespace exercise.main
                     return hand1[i].ValueInt > hand2[i].ValueInt ? "Player 1" : "Player 2";
                 }
             }
+            for (int i = 6; i>= 0; i--)
+            {
+                if (Player1.Hand[i].ValueInt != Player2.Hand[i].ValueInt)
+                {
+                    return Player1.Hand[i].ValueInt > Player2.Hand[i].ValueInt ? "Player 1" : "Player 2";
+                }
+            }
             return "Tie";
         }
 
-        public string tieBreaker(string score, Player player1, Player player2)
+        public string tieBreaker(Player player1, Player player2)
         {
             return highCard(player1.Hand, player2.Hand);
         }
@@ -445,7 +452,7 @@ namespace exercise.main
 
             if (outcome == "Tie")
             {
-                outcome = tieBreaker(player1Score, player1Hand, player2Hand);
+                winner = tieBreaker(player1Hand, player2Hand);
             }
 
             if (outcome == "Player 1")
@@ -480,28 +487,28 @@ namespace exercise.main
                 Console.WriteLine();
                 if (winner == Player1.Name)
                 {
-                    Console.WriteLine($"Won with {player1Score}: {printCards(player1Hand.Hand)}");
-                    Console.WriteLine($"Lost with {player2Score}: {printCards(player2Hand.Hand)}");
+                    Console.WriteLine($"{Player1.Name} won with {player1Score}: {printCards(player1Hand.Hand)}");
+                    Console.WriteLine($"{Player2.Name} lost with {player2Score}: {printCards(player2Hand.Hand)}");
                     Player1.Money += BetAmount;
                     Player2.Money -= BetAmount;
                     Console.WriteLine();
-                    Console.WriteLine($"{winner} won £{BetAmount}. New total is £{Player1.Money}");
+                    Console.WriteLine($"{Player1.Name} won £{BetAmount}. New total is £{Player1.Money}");
                     Console.WriteLine($"{Player2.Name} lost £{BetAmount}. New total is £{Player2.Money}");
                 }
                 else if (winner == Player2.Name)
                 {
-                    Console.WriteLine($"Won with hand {player2Score}: {printCards(player2Hand.Hand)}");
-                    Console.WriteLine($"With with hand {player1Score}: {printCards(player1Hand.Hand)}");
+                    Console.WriteLine($"{Player2.Name} won with {player2Score}: {printCards(player2Hand.Hand)}");
+                    Console.WriteLine($"{Player1.Name} lost with hand {player1Score}: {printCards(player1Hand.Hand)}");
                     Player1.Money -= BetAmount;
                     Player2.Money += BetAmount;
                     Console.WriteLine();
-                    Console.WriteLine($"{winner} won £{BetAmount}. New total is £{Player2.Money}");
+                    Console.WriteLine($"{Player2.Name} won £{BetAmount}. New total is £{Player2.Money}");
                     Console.WriteLine($"{Player1.Name} lost £{BetAmount}. New total is £{Player1.Money}");
                 }
                 else
                 {
-                    Console.WriteLine($"{Player1.Name} had {player2Score}: {printCards(player2Hand.Hand)}");
-                    Console.WriteLine($"{Player2.Name} had {player1Score}: {printCards(player1Hand.Hand)}");
+                    Console.WriteLine($"{Player1.Name} had {player1Score}: {printCards(Player1.Hand)}");
+                    Console.WriteLine($"{Player2.Name} had {player2Score}: {printCards(Player2.Hand)}");
                 }
             }
         }
