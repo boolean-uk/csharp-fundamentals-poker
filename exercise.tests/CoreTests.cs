@@ -18,7 +18,7 @@ public class Tests
         { 
             new Tuple<string, string>("K", "5"),
             new Tuple<string, string>("3","7")
-        };
+        }; 
         Tuple<string, string> winner;
         
         bool result = core.winningPair(hand, out winner);
@@ -29,6 +29,7 @@ public class Tests
 
     }
 
+    [Test]
     //{("K","5"),("2","2")} => true out ("2","2")
     public void Scenario1b()
     {
@@ -38,25 +39,25 @@ public class Tests
 
         List<Tuple<string, string>> hand = new List<Tuple<string, string>>
         {
-            new Tuple<string, string>("K", "5"),
+            new Tuple<string, string>("K","5"),
             new Tuple<string, string>("2","2")
         };
         Tuple<string, string> winner;
 
         bool result = core.winningPair(hand, out winner);
 
-        Assert.That(result, Is.False);
+        Assert.That(result, Is.True);
         Assert.That(winner.Item1, Is.EqualTo("2"));
         Assert.That(winner.Item2, Is.EqualTo("2"));
 
     }
 
+    
+
     //("K","K"), ("A","A")} => true out ("A","A")
     [Test]
     public void Scenario2()
     {
-
-
         Core core = new Core();
 
         List<Tuple<string, string>> hand = new List<Tuple<string, string>>
@@ -64,6 +65,7 @@ public class Tests
             new Tuple<string, string>("K", "K"),
             new Tuple<string, string>("A","A")
         };
+
         Tuple<string, string> winner;
         bool result = core.winningPair(hand, out winner);
 
@@ -72,9 +74,11 @@ public class Tests
         Assert.IsTrue(winner.Item1=="A" && winner.Item2=="A");
 
     }
+    
+    
     //{("4", "3"),("6","6"),("7","7"),("3","3")}  => true ("7", "7")
     [Test]
-    public void Scenario3()
+    public void Scenario3() 
     {
         Core core = new Core();
 
@@ -93,6 +97,7 @@ public class Tests
         Assert.IsTrue(winner.Item1 == "7" && winner.Item2 == "7");
 
     }
+     
 
     [TestCase("2",2)]
     [TestCase("3",3)]
