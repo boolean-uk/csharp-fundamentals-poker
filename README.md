@@ -28,7 +28,8 @@ pair of matching cards, then the highest pair must win.
 If none of the hands is a pair, then just return false and an empty string tuple.
 
 ## Extension Task
-Given hands of three cards, calculate the winning hand when the hand is a triplet of three cards of the same value. If none of the hands are a triplet, return false and an empty string tuple.
+Given hands of three cards, calculate the winning hand when the hand is a triplet of three cards of the same value. 
+If none of the hands are a triplet, return false and an empty string tuple.
 
 # Ungraded Extension
 
@@ -39,8 +40,15 @@ Requirements:
 - Implement a `Deck` class that stores a list / dictionary / array of `Card` objects
     - The `Deck` should have a method to `Shuffle()` / regenerate the deck
     - The `Deck` should have a method to `Deal()` one card from the deck, removing it from the list of cards in the deck
-- Implement a `Player` class that stores the Name of the player and a list of cards that the player has in their hand. The class should have a method for adding 1 card to the hand; a method to clear the cards in the hand; a method for returning what cards are in the hand.
-- Implement a `PokerGame` class. This class should create 2 `Players` and a `Deck`; this class should have different methods as required to start a game; check if anyone has won; store a list of cards on the table; and functions to progress from the start of a Poker round until a player has won (5 cards have been dealt).
+- Implement a `Player` class that stores the Name of the player and a list of cards that the player has in their hand. 
+The class should have a method for adding 1 card to the hand; a method to clear the cards in the hand;
+a method for returning what cards are in the hand.
+
+- Implement a `PokerGame` class. This class should create 2 `Players` and a `Deck`; 
+this class should have different methods as required to start a game; 
+check if anyone has won; store a list of cards on the table; 
+and functions to progress from the start of a Poker round until a player has won (5 cards have been dealt).
+
 - Write some code in `Program.cs` to run a full simulation of a round of Poker which involves resetting a deck, clearing the player's hands; dealing 2 cards to each player + 3 cards on the table; then dealing 2 more cards onto the table and finally computing the winner of that round. Your code should clearly print out messages about each stage and display the player's hands, the tables cards and the winner.
   
 This is open ended, there are many ways to implement this.
