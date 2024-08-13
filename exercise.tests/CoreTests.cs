@@ -94,6 +94,29 @@ public class Tests
 
     }
 
+    //Selfmade test scenario for extension task testing for triplets
+    //{("4", "3", "5"),("6","6","6"),("7","7","K"),("3","3","3")}  => true ("6", "6", "6")
+    [Test]
+    public void Scenario4()
+    {
+        Core core = new Core();
+
+        List<Tuple<string, string, string>> hand = new List<Tuple<string, string, string>>
+        {
+            new Tuple<string, string, string>("4", "3", "5"),
+            new Tuple<string, string, string>("6", "6", "6"),
+            new Tuple<string, string, string>("7", "7", "K"),
+            new Tuple<string, string, string>("3","3", "3")
+        };
+        Tuple<string, string, string> winner;
+        bool result = core.winningTriplet(hand, out winner);
+
+        Assert.That(result, Is.True);
+
+        Assert.IsTrue(winner.Item1 == "6" && winner.Item2 == "6" && winner.Item3 == "6");
+
+    }
+
     [TestCase("2",2)]
     [TestCase("3",3)]
     [TestCase("4",4)]

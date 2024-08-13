@@ -20,13 +20,73 @@ namespace exercise.main
         {
             result = new Tuple<string,string>(string.Empty, string.Empty);
 
-            // your code here...          
-
+            foreach (var hand in hands)
+            {
+                if (hand.Item1 == hand.Item2)
+                {
+                    if (result.Item1 != string.Empty)
+                    {
+                        if (GetValueOfCard(hand.Item1) > GetValueOfCard(result.Item1))
+                        {
+                            result = hand;
+                        }
+                    } else
+                    {
+                        result = hand;
+                    }
+                }
+            }
             return result.Item1!=string.Empty ? true : false;
         }
+
+        public bool winningTriplet(IEnumerable<Tuple<string, string, string>> hands, out Tuple<string, string, string> result)
+        {
+            result = new Tuple<string, string, string>(string.Empty, string.Empty, string.Empty);
+
+            foreach (var hand in hands)
+            {
+                if (hand.Item1 == hand.Item2 && hand.Item2 == hand.Item3)
+                {
+                    if (result.Item1 != string.Empty)
+                    {
+                        if (GetValueOfCard(hand.Item1) > GetValueOfCard(result.Item1))
+                        {
+                            result = hand;
+                        }
+                    }
+                    else
+                    {
+                        result = hand;
+                    }
+                }
+            }
+            return result.Item1 != string.Empty ? true : false;
+        }
+
         public int GetValueOfCard(string card)
         {
-            return  0;           
+            bool isNumericCard = int.TryParse(card, out int cardNumber);
+
+            if (isNumericCard)
+            {
+                return cardNumber;
+            }
+            else
+            {
+                switch (card)
+                {
+                    case "J":
+                        return 11;
+                    case "Q":
+                        return 12;
+                    case "K":
+                        return 13;
+                    case "A":
+                        return 14;
+                    default:
+                        return 0;
+                }
+            }
         }
     }
 }
