@@ -10,6 +10,13 @@ namespace exercise.main
 {
     public class Core
     {
+        Dictionary<string, int> cardValue = new Dictionary<string, int>()
+        {
+            ["J"] = 11,
+            ["Q"] = 12,
+            ["K"] = 13,
+            ["A"] = 14
+        };
        
         // Note:
         // IEnumerable is a class that the List inherits (ie List has all the functionality of IEnumerable)
@@ -19,14 +26,33 @@ namespace exercise.main
         public bool winningPair(IEnumerable<Tuple<string, string>> hands, out Tuple<string, string> result)
         {
             result = new Tuple<string,string>(string.Empty, string.Empty);
+            int winnerValue = 0;
 
-            // your code here...          
+            foreach(Tuple<string, string> pair in hands)
+            {
+                if (pair.Item1.Equals(pair.Item2))
+                {
+                                   
+                    if (GetValueOfCard(pair.Item1) > winnerValue ) 
+                    {
+                        result = pair;
+                        winnerValue = GetValueOfCard(pair.Item1);
+                    }
+                }
+            }
 
             return result.Item1!=string.Empty ? true : false;
         }
         public int GetValueOfCard(string card)
         {
-            return  0;           
+            if (cardValue.ContainsKey(card))
+            {
+                return cardValue[card];
+            }
+            else
+            {
+                return int.Parse(card);
+            }
         }
     }
 }
