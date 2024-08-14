@@ -35,6 +35,13 @@ namespace exercise.main
         public void RunAGame()
         {
             Console.WriteLine("New game started!\nDealing cards!");
+
+            foreach (var player in players)
+            {
+                player.EmptyHand();
+            }
+            board.Clear();
+            
             // start by generating the deck.
             deck.InitializeDeck();
 

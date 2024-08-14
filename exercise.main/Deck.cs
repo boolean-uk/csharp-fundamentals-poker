@@ -14,8 +14,17 @@ namespace exercise.main
 
         public void ShuffleDeck()
         {
+
             Random random = new Random();
-            deck = deck.OrderBy(item => random.Next()).ToList();
+            int n = deck.Count;
+            while(n > 1)
+            {
+                n--;
+                int j = random.Next(n + 1);
+                Card temp = deck[j];
+                deck[j] = deck[n];
+                deck[n] = temp;
+            }
         }
 
 
