@@ -8,7 +8,7 @@ namespace exercise.main
 {
     public class CardHandler
     {
-        Dictionary<string, int> CardValues { get; set; } = new Dictionary<string, int>
+        public Dictionary<string, int> CardValues { get; set; } = new Dictionary<string, int>
             {
                 {"1",1 },
                 {"2",2},
@@ -40,5 +40,7 @@ namespace exercise.main
         public bool isTriplet(Tuple<string, string, string> triplet) {
             return triplet.Item1 == triplet.Item2 && triplet.Item2 == triplet.Item3;
         }
+        
+
     }
 }
