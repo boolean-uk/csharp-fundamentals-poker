@@ -114,4 +114,67 @@ public class Tests
         Assert.That(result, Is.EqualTo(value));
     }
 
+
+
+    [Test]
+    public void Scenario4()
+    {
+        Extension extension = new Extension();
+
+        List<Tuple<string, string, string>> hand = new List<Tuple<string, string, string>>
+        {
+            new Tuple<string, string, string>("4", "3", "3"),
+            new Tuple<string, string, string>("6", "6", "6"),
+            new Tuple<string, string, string>("7", "7", "7"),
+            new Tuple<string, string, string>("3","3", "3")
+        };
+        Tuple<string, string, string> winner;
+        bool result = extension.winningThree(hand, out winner);
+
+        Assert.That(result, Is.True);
+
+        Assert.IsTrue(winner.Item1 == "7" && winner.Item2 == "7");
+    }
+
+
+    [Test]
+    public void Scenario5()
+    {
+        Extension extension = new Extension();
+
+        List<Tuple<string, string, string>> hand = new List<Tuple<string, string, string>>
+        {
+            new Tuple<string, string, string>("4", "3", "3"),
+            new Tuple<string, string, string>("6", "2", "6"),
+            new Tuple<string, string, string>("9", "7", "7"),
+            new Tuple<string, string, string>("3","K", "3")
+        };
+        Tuple<string, string, string> winner;
+        bool result = extension.winningThree(hand, out winner);
+
+        Assert.That(result, Is.False);
+        Assert.That(winner.Item1, Is.EqualTo(String.Empty));
+        Assert.That(winner.Item2, Is.EqualTo(String.Empty));
+    }
+
+    [Test]
+    public void Scenario6()
+    {
+        Extension extension = new Extension();
+
+        List<Tuple<string, string, string>> hand = new List<Tuple<string, string, string>>
+        {
+            new Tuple<string, string, string>("4", "3", "3"),
+            new Tuple<string, string, string>("2", "2", "2"),
+            new Tuple<string, string, string>("A", "A", "K"),
+            new Tuple<string, string, string>("3","2", "2")
+        };
+        Tuple<string, string, string> winner;
+        bool result = extension.winningThree(hand, out winner);
+
+        Assert.That(result, Is.True);
+        Assert.That(winner.Item1, Is.EqualTo("2"));
+        Assert.That(winner.Item2, Is.EqualTo("2"));
+        Assert.That(winner.Item3, Is.EqualTo("2"));
+    }
 }
